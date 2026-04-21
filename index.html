@@ -935,6 +935,112 @@
       line-height: 1.55;
     }
 
+    /* ─── Products ─── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .product {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: clamp(24px, 2.5vw, 36px);
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow-card);
+      transition: transform .4s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .3s;
+      overflow: hidden;
+    }
+    .product::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 0%, rgba(212, 168, 82, .08), transparent 60%);
+      opacity: 0;
+      transition: opacity .4s;
+      pointer-events: none;
+    }
+    .product:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212, 168, 82, .28);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .product:hover::before { opacity: 1; }
+
+    .product-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .product-tag .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+    }
+    .product-name {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 1.8vw + 14px, 30px);
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .product-name em {
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--gold);
+    }
+    .product-desc {
+      font-size: var(--fs-body);
+      line-height: 1.7;
+      color: var(--ink-mute);
+      margin-bottom: var(--space-4);
+      flex: 1;
+    }
+    .product-meta {
+      margin-top: auto;
+      padding-top: var(--space-3);
+      border-top: 1px dashed var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .product-meta .tags {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .product-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600;
+      color: var(--gold);
+      transition: gap .25s;
+    }
+    .product-link:hover { gap: 10px; }
+
+    .products-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .products-cta-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: var(--ink-mute);
+      text-transform: uppercase;
+    }
+
     /* ─── Features ─── */
     .features-grid {
       display: grid;
@@ -1751,6 +1857,9 @@
       .testi-big, .testi-lg-2 { grid-column: span 12; }
       .testi-md, .testi-sm { grid-column: span 6; }
 
+      /* Products: 3-col stays comfortable at 960, tighten gap */
+      .products-grid { gap: 16px; }
+
       .footer-brand-row { grid-template-columns: 1fr 1fr; }
     }
 
@@ -1781,6 +1890,9 @@
 
       /* Testimonials full width below 860 */
       .testi-big, .testi-md, .testi-sm, .testi-lg-2 { grid-column: span 12; }
+
+      /* Products: 3-col → 1-col stacked; CTA stays centered */
+      .products-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
 
       .footer-brand-row {
         grid-template-columns: 1fr;
@@ -1900,10 +2012,10 @@
 
     <div class="nav-links">
       <a href="#features" class="nav-link">Platform</a>
+      <a href="#products" class="nav-link">Products</a>
       <a href="#process" class="nav-link">Process</a>
       <a href="#reviews" class="nav-link">Customers</a>
       <a href="#pricing" class="nav-link">Pricing</a>
-      <a href="#" class="nav-link">Docs</a>
     </div>
 
     <div class="nav-actions">
@@ -2273,13 +2385,78 @@
 </section>
 
 <!-- ══════════════════════════════════════════════
+     PRODUCTS
+══════════════════════════════════════════════ -->
+<section id="products" class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <div>
+        <div class="section-number">§ 02 <span class="sep">—</span> Our Products</div>
+        <h2 class="section-h2 display">A <em>family</em> of tools<br>for quality.</h2>
+      </div>
+      <p class="section-desc">Three products, one shared runtime. Mix what you need — start with the runner, add the insight layer when you scale, plug in the gate when you're ready for quality as policy.</p>
+    </div>
+
+    <div class="products-grid">
+
+      <div class="product">
+        <div class="product-tag"><span class="dot"></span>Runner</div>
+        <h3 class="product-name display">Tester <em>Runner</em></h3>
+        <p class="product-desc">The flagship regression engine. Every commit spins up an isolated environment, runs your full suite in parallel, and self-quarantines flaky tests so your attention stays on real signal.</p>
+        <div class="product-meta">
+          <span class="tags">Free · Pro · Enterprise</span>
+          <a href="product.html" class="product-link">Learn more
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-tag"><span class="dot"></span>Insights</div>
+        <h3 class="product-name display">Tester <em>Insights</em></h3>
+        <p class="product-desc">AI-powered quality memos surface what matters — flake trajectories, coverage drift, time-to-recovery — in a single-page report your stakeholders will actually read on Fridays.</p>
+        <div class="product-meta">
+          <span class="tags">Pro · Enterprise</span>
+          <a href="product.html" class="product-link">Learn more
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-tag"><span class="dot"></span>Gate</div>
+        <h3 class="product-name display">Tester <em>Gate</em></h3>
+        <p class="product-desc">Quality-as-policy enforcement for your pipeline. Block merges on coverage drops, flake spikes, or critical failures — with one-line summaries that tell reviewers exactly why.</p>
+        <div class="product-meta">
+          <span class="tags">Pro · Enterprise</span>
+          <a href="product.html" class="product-link">Learn more
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="products-cta">
+      <a href="product.html" class="btn btn-gold">
+        Explore all products
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <span class="products-cta-note">Full comparison · specs · pricing</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
      PROCESS
 ══════════════════════════════════════════════ -->
 <section id="process" class="process">
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 02 <span class="sep">—</span> The Flow</div>
+        <div class="section-number">§ 03 <span class="sep">—</span> The Flow</div>
         <h2 class="section-h2 display">Live in fifteen<br><em>minutes flat.</em></h2>
       </div>
       <p class="section-desc">No onboarding calls. No consultants. Connect your repo, pick your gates, and start catching regressions before lunch.</p>
@@ -2320,7 +2497,7 @@
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 03 <span class="sep">—</span> Field Reports</div>
+        <div class="section-number">§ 04 <span class="sep">—</span> Field Reports</div>
         <h2 class="section-h2 display">Loved by engineers.<br><em>Trusted by leaders.</em></h2>
       </div>
       <p class="section-desc">Read what teams shipping real products — fintech, healthcare, SaaS — say after six months with Tester.io as their quality spine.</p>
@@ -2389,7 +2566,7 @@
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 04 <span class="sep">—</span> Pricing</div>
+        <div class="section-number">§ 05 <span class="sep">—</span> Pricing</div>
         <h2 class="section-h2 display">Fair, flat,<br><em>no surprises.</em></h2>
       </div>
       <p class="section-desc">Per-team, not per-seat. Free while you prototype. Scale without rewriting the contract. Cancel whenever.</p>

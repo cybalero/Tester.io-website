@@ -3,3 +3,8 @@ temporary screenshots/
 .claude/
 .DS_Store
 Thumbs.db
+
+# Secrets — never commit
+.env
+.api-key
+config.local.mjs
