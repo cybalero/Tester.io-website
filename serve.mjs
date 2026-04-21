@@ -4,13 +4,28 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = 3000;
 
-// Read API key from gitignored local file (never hard-code secrets)
-const API_KEY = (() => {
+// Load .env (simple KEY=VALUE parser — no external dep). Falls back
+// to .api-key for the raw key if .env isn't present.
+const ENV = (() => {
+  const env = {};
+  try {
+    const raw = fs.readFileSync(path.join(__dirname, '.env'), 'utf8');
+    for (const line of raw.split(/\r?\n/)) {
+      if (!line || line.trim().startsWith('#')) continue;
+      const m = /^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/.exec(line);
+      if (m) env[m[1]] = m[2].replace(/^["'](.*)["']$/, '$1');
+    }
+  } catch {}
+  return env;
+})();
+
+const API_KEY = ENV.API_KEY || (() => {
   try { return fs.readFileSync(path.join(__dirname, '.api-key'), 'utf8').trim(); }
   catch { return ''; }
 })();
+
+const PORT = Number(ENV.PORT) || 3000;
 
 const mimeTypes = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',

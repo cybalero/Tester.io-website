@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sights · La Sagrada Familia — in three acts</title>
+  <meta name="description" content="A scroll-driven animation: from blueprint, to stone, to shadow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="brand_assets/sagrada-frames/frame-001.jpg">
+  <link rel="preload" as="image" href="brand_assets/sagrada-frames/frame-121.jpg">
+  <link rel="preload" as="image" href="brand_assets/taj-frames/frame-001.jpg">
+  <link rel="preload" as="image" href="brand_assets/taj-frames/frame-120.jpg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #050505;
+      --bg-2:     #0B0B0B;
+      --bg-3:     #131313;
+      --ink:      #F2EDE4;
+      --ink-2:    #D8D2C6;
+      --ink-mute: #7E7870;
+      --ink-dim:  #3E3A34;
+      --accent:   #C9A876;
+      --accent-hi:#E8CE9B;
+      --blueprint:#B9D3EE;
+      --rust:     #C06052;
+      --line:     rgba(201, 168, 118, .10);
+      --line-2:   rgba(201, 168, 118, .22);
+
+      --font-serif: "Fraunces", "Didot", "Times New Roman", serif;
+      --font-mono:  "JetBrains Mono", ui-monospace, monospace;
+
+      --max: 1320px;
+      --pad: clamp(20px, 4vw, 48px);
+      --fs-body:  clamp(15px, 0.5vw + 13px, 17px);
+      --fs-lede:  clamp(17px, 0.6vw + 15px, 20px);
+      --fs-h2:    clamp(36px, 5vw, 72px);
+      --fs-h1:    clamp(64px, 11vw, 180px);
+    }
+
+    html, body { background: var(--bg); color: var(--ink); }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      font-family: var(--font-serif);
+      font-size: var(--fs-body);
+      font-weight: 300;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: var(--accent); color: #000; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--ink-dim); border-radius: 10px; }
+
+    a { color: inherit; text-decoration: none; }
+    img, canvas { display: block; max-width: 100%; }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+    /* Persistent subtle film grain — gives the whole page a celluloid feel */
+    .grain {
+      position: fixed; inset: 0;
+      z-index: 90;
+      pointer-events: none;
+      opacity: .05;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='2.4' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .8  0 0 0 0 .75  0 0 0 0 .7  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    /* Top scroll progress bar — architectural thin line */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 1px; width: 0%;
+      background: linear-gradient(90deg, var(--accent-hi), var(--accent));
+      z-index: 100;
+      transition: width .08s linear;
+    }
+
+    /* ─── Nav ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 20px 0;
+      font-family: var(--font-mono);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 20px;
+    }
+    .nav-brand {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .nav-brand::before {
+      content: "";
+      width: 22px; height: 1px;
+      background: var(--accent);
+    }
+    .nav-links { display: flex; gap: 22px; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); }
+    .nav-links a { transition: color .25s; }
+    .nav-links a:hover { color: var(--accent-hi); }
+    .nav-back { color: var(--ink-mute); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; transition: color .25s; }
+    .nav-back:hover { color: var(--accent-hi); }
+    @media (max-width: 760px) { .nav-links { display: none; } }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 0 40px;
+      overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201, 168, 118, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 168, 118, .05) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 15%, transparent 75%);
+    }
+    .hero-halo {
+      position: absolute;
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(90vw, 900px); height: min(90vw, 900px);
+      background: radial-gradient(circle, rgba(201, 168, 118, .09) 0%, transparent 60%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: clamp(24px, 4vw, 40px);
+      display: inline-flex; align-items: center; gap: 14px;
+    }
+    .hero-eyebrow::before {
+      content: ""; width: 36px; height: 1px; background: var(--accent);
+    }
+    .hero-h1 {
+      font-family: var(--font-serif);
+      font-size: var(--fs-h1);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      margin-bottom: clamp(20px, 2.5vw, 32px);
+    }
+    .hero-h1 em {
+      font-style: italic;
+      font-weight: 200;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--accent-hi);
+      display: inline-block;
+      padding-right: 0.05em;
+    }
+    .hero-lede {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: var(--fs-lede);
+      line-height: 1.5;
+      color: var(--ink-2);
+      max-width: 38ch;
+      margin-bottom: clamp(32px, 5vw, 56px);
+    }
+    .hero-coords {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      display: flex; flex-wrap: wrap; gap: 8px 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      max-width: 520px;
+    }
+    .hero-coords span { color: var(--ink-2); }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .hero-scroll::after {
+      content: "";
+      width: 1px; height: 42px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(.6); transform-origin: top; opacity: .6; }
+      50%      { transform: scaleY(1);  transform-origin: top; opacity: 1;   }
+    }
+
+    /* Architectural corner crosshairs — frame the hero like a drafting sheet */
+    .hero-corners span {
+      position: absolute;
+      width: 22px; height: 22px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hero-corners span::before, .hero-corners span::after {
+      content: ""; position: absolute; background: var(--accent); opacity: .55;
+    }
+    .hero-corners span::before { width: 22px; height: 1px; top: 0; left: 0; }
+    .hero-corners span::after  { width: 1px; height: 22px; top: 0; left: 0; }
+    .hero-corners .c-tl { top: 32px; left: 32px; }
+    .hero-corners .c-tr { top: 32px; right: 32px; transform: scaleX(-1); }
+    .hero-corners .c-bl { bottom: 32px; left: 32px; transform: scaleY(-1); }
+    .hero-corners .c-br { bottom: 32px; right: 32px; transform: scale(-1, -1); }
+
+    /* ═══════════════════════════════════════════════
+       LOADER — covers until enough frames are cached
+       ═══════════════════════════════════════════════ */
+    .loader {
+      position: fixed; inset: 0;
+      z-index: 120;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px;
+      transition: opacity .7s ease, visibility .7s ease;
+    }
+    .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-mark {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .loader-bar {
+      width: min(240px, 60vw);
+      height: 1px;
+      background: var(--ink-dim);
+      position: relative;
+      overflow: hidden;
+    }
+    .loader-bar::after {
+      content: "";
+      position: absolute; top: 0; left: 0; bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-hi), var(--accent));
+    }
+    .loader-bar[data-w]::after { width: var(--w, 0%); }
+    .loader-count {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--ink-mute);
+    }
+
+    /* ═══════════════════════════════════════════════
+       STAGE  —  scroll-driven frame animation
+       ═══════════════════════════════════════════════ */
+    .stage {
+      position: relative;
+      height: 600vh;        /* total scroll length — more = slower playback */
+      background: var(--bg);
+    }
+    .stage-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stage-frame-wrap {
+      position: relative;
+      width: min(92vh, 92vw);
+      aspect-ratio: 1 / 1;
+    }
+    .stage-frame {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* Dark finale overlay — fades in during the last act */
+    .stage-darken {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 45%, transparent 20%, rgba(0,0,0,.55) 70%, #000 100%),
+        linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.5));
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    /* Frame edge crosshairs (technical drawing feel) */
+    .stage-crosshair {
+      position: absolute;
+      width: 18px; height: 18px;
+      pointer-events: none;
+      opacity: .7;
+    }
+    .stage-crosshair::before, .stage-crosshair::after {
+      content: ""; position: absolute; background: var(--accent);
+    }
+    .stage-crosshair::before { width: 18px; height: 1px; top: 50%; left: 0; }
+    .stage-crosshair::after  { width: 1px; height: 18px; top: 0; left: 50%; }
+    .stage-frame-wrap .ch-tl { top: -10px; left: -10px; }
+    .stage-frame-wrap .ch-tr { top: -10px; right: -10px; }
+    .stage-frame-wrap .ch-bl { bottom: -10px; left: -10px; }
+    .stage-frame-wrap .ch-br { bottom: -10px; right: -10px; }
+
+    /* Meta corners — read like a technical plate */
+    .stage-meta {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      z-index: 4;
+    }
+    .stage-meta > div {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    /* Top labels sit below the fixed nav so they don't collide with it */
+    .stage-meta .meta-tl { top: 64px; left: 28px; color: var(--accent); }
+    .stage-meta .meta-tr { top: 64px; right: 28px; text-align: right; }
+    .stage-meta .meta-bl { bottom: 24px; left: 28px; }
+    .stage-meta .meta-br { bottom: 24px; right: 28px; text-align: right; }
+    .stage-meta b { color: var(--ink); font-weight: 500; }
+
+    /* ─── Acts: three text blocks that fade in at their thresholds ─── */
+    .act {
+      position: absolute;
+      z-index: 3;
+      max-width: 360px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .7s cubic-bezier(.22,1,.36,1),
+                  transform .7s cubic-bezier(.22,1,.36,1);
+      transform: translateY(14px);
+      color: var(--ink);
+    }
+    .act.on { opacity: 1; transform: translateY(0); }
+    .act-tag {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .act-tag::before { content: ""; width: 20px; height: 1px; background: var(--accent); }
+    .act-h {
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: clamp(28px, 2.4vw + 14px, 44px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .act-h em {
+      font-style: italic; font-weight: 200;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--accent-hi);
+    }
+    .act-p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 15.5px;
+      line-height: 1.55;
+      color: var(--ink-2);
+    }
+    .act-p strong { font-style: normal; color: var(--ink); font-weight: 500; }
+
+    .act-1 { top: 18%;  left:  clamp(16px, 4vw, 56px); }
+    .act-2 { bottom: 22%; right: clamp(16px, 4vw, 56px); text-align: right; }
+    .act-2 .act-tag { flex-direction: row-reverse; }
+    .act-2 .act-tag::before { margin-left: 10px; }
+    .act-3 {
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, calc(-50% + 14px));
+      max-width: 520px;
+      text-align: center;
+      color: var(--accent-hi);
+    }
+    .act-3.on { transform: translate(-50%, -50%); }
+    .act-3 .act-tag { justify-content: center; }
+
+    @media (max-width: 860px) {
+      .act { max-width: min(70vw, 320px); }
+      .act-1 { top: 14%; }
+      .act-2 { bottom: 14%; }
+    }
+    @media (max-width: 600px) {
+      .stage { height: 500vh; }
+      .stage-frame-wrap { width: min(88vw, 88vh); }
+      .act-1, .act-2 { position: absolute; left: 20px; right: 20px; max-width: none; text-align: left; }
+      .act-2 { text-align: left; }
+      .act-2 .act-tag { flex-direction: row; }
+      .stage-meta .meta-tl, .stage-meta .meta-tr, .stage-meta .meta-bl, .stage-meta .meta-br { font-size: 9.5px; }
+      /* Drop top meta below the nav so it doesn't collide */
+      .stage-meta .meta-tl, .stage-meta .meta-tr { top: 68px; }
+      .stage-meta .meta-bl, .stage-meta .meta-br { bottom: 18px; }
+      .nav { padding: 14px 0; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       PLATE BREAK  —  divider between landmarks
+       ═══════════════════════════════════════════════ */
+    .plate-break {
+      position: relative;
+      z-index: 2;
+      background: var(--bg);
+      min-height: 115vh;          /* > viewport so sticky stages fully release */
+      padding: clamp(140px, 18vw, 220px) 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+    .plate-break::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(201, 168, 118, .06), transparent 50%);
+      pointer-events: none;
+    }
+    .plate-break-inner {
+      position: relative; z-index: 2;
+      max-width: 640px;
+      padding: 0 var(--pad);
+    }
+    .plate-break-rule {
+      width: 120px; height: 1px;
+      background: var(--accent);
+      margin: 0 auto clamp(28px, 4vw, 40px);
+      opacity: .7;
+    }
+    .plate-break-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: clamp(18px, 2.5vw, 28px);
+    }
+    .plate-break-h {
+      font-family: var(--font-serif);
+      font-size: clamp(42px, 6vw, 80px);
+      font-weight: 200;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      margin-bottom: clamp(18px, 2.5vw, 28px);
+    }
+    .plate-break-h em {
+      font-style: italic; font-weight: 200;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--accent-hi);
+    }
+    .plate-break-meta {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      display: flex; gap: 22px; justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ═══════════════════════════════════════════════
+       OUTRO  —  quote + replay
+       ═══════════════════════════════════════════════ */
+    .outro {
+      min-height: 105vh;    /* taller than the viewport so scrolling to the
+                               bottom never peeks back into the sticky stage */
+      padding: clamp(140px, 18vw, 240px) 0 80px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+      z-index: 2;
+    }
+    .outro-grid {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(201, 168, 118, .04) 1px, transparent 1px);
+      background-size: 100% 48px;
+      mask-image: linear-gradient(to bottom, black, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+    }
+    .outro-inner {
+      position: relative; z-index: 2;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+      text-align: center;
+    }
+    .outro-mark {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: clamp(32px, 5vw, 56px);
+      display: inline-flex; align-items: center; gap: 14px;
+    }
+    .outro-mark::before, .outro-mark::after {
+      content: ""; width: 28px; height: 1px; background: var(--accent);
+    }
+    .outro-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 200;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      font-size: clamp(32px, 4.2vw + 6px, 64px);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+    .outro-quote::before { content: "" "; color: var(--accent); }
+    .outro-quote::after  { content: " ""; color: var(--accent); }
+    .outro-cite {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: clamp(48px, 8vw, 96px);
+    }
+    .outro-links {
+      display: flex; justify-content: center; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: 1px solid var(--line-2);
+      color: var(--ink);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), background .3s, border-color .3s, color .3s;
+    }
+    .btn:hover { transform: translateY(-2px); background: rgba(201, 168, 118, .06); border-color: var(--accent); color: var(--accent-hi); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-hi), var(--accent));
+      color: #14110C;
+      border-color: transparent;
+    }
+    .btn-primary:hover { transform: translateY(-2px); color: #14110C; background: linear-gradient(135deg, #F1D89C, var(--accent-hi)); }
+    .btn-primary:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════ */
+    .footer {
+      padding: 40px 0 48px;
+      border-top: 1px solid var(--line);
+    }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .footer a { color: var(--ink-mute); transition: color .25s; }
+    .footer a:hover { color: var(--accent-hi); }
+  </style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="scroll-progress" id="scrollBar"></div>
+
+<!-- ─── Loader ─── -->
+<div class="loader" id="loader">
+  <div class="loader-mark">Assembling the cathedral</div>
+  <div class="loader-bar" id="loaderBar"></div>
+  <div class="loader-count"><span id="loadN">0</span> / <span id="loadTotal">241</span> plates</div>
+</div>
+
+<!-- ─── Nav ─── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Sights · Vol. 01</a>
+    <div class="nav-links">
+      <a href="#sagrada-stage">№ 01 · Sagrada</a>
+      <a href="#taj-stage">№ 02 · Taj Mahal</a>
+    </div>
+    <a href="index.html" class="nav-back">← Tester.io</a>
+  </div>
+</nav>
+
+<!-- ─── Hero ─── -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-halo"></div>
+  <div class="hero-corners">
+    <span class="c-tl"></span><span class="c-tr"></span>
+    <span class="c-bl"></span><span class="c-br"></span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Sights · Vol. 01 · Two Landmarks</div>
+    <h1 class="hero-h1">Drawn, <em>built,</em><br>undone.</h1>
+    <p class="hero-lede">Two cathedrals, two scrolls. From a line on paper to stone in the sun to geometry in the dark — first Barcelona, then Agra. Scroll to turn the page.</p>
+    <div class="hero-coords">
+      <span>№ 01 · Sagrada Familia · Barcelona</span>
+      <span>№ 02 · Taj Mahal · Agra</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ─── № 01 · La Sagrada Familia ─── -->
+<section class="stage"
+         id="sagrada-stage"
+         data-frame-src="brand_assets/sagrada-frames/frame-{n}.jpg"
+         data-frame-count="121"
+         data-darken-start="0.75"
+         data-darken-max="0.95"
+         data-plates="The Blueprint|The Ascent|The Shadow">
+  <div class="stage-sticky">
+    <div class="stage-frame-wrap">
+      <canvas class="stage-frame" data-role="canvas" width="960" height="960" aria-label="La Sagrada Familia construction sequence"></canvas>
+      <div class="stage-darken" data-role="darken"></div>
+
+      <span class="stage-crosshair ch-tl"></span>
+      <span class="stage-crosshair ch-tr"></span>
+      <span class="stage-crosshair ch-bl"></span>
+      <span class="stage-crosshair ch-br"></span>
+    </div>
+
+    <div class="stage-meta">
+      <div class="meta-tl">Frame <b data-role="frame-num">001</b> / 121</div>
+      <div class="meta-tr">Plate <b data-role="plate-num">I</b> — <span data-role="plate-name">The Blueprint</span></div>
+      <div class="meta-bl">Antoni Gaudí · i. Cornet</div>
+      <div class="meta-br">Elevation · west façade</div>
+    </div>
+
+    <div class="act act-1" data-act="0" data-act-in="0.04" data-act-out="0.30">
+      <div class="act-tag">Act I</div>
+      <h2 class="act-h">The <em>Blueprint.</em></h2>
+      <p class="act-p">Gaudí drew it in <strong>1882</strong> — every column a catenary, every arch a calculation hung from a thread. A cathedral of lines before it was a cathedral of stone.</p>
+    </div>
+
+    <div class="act act-2" data-act="1" data-act-in="0.36" data-act-out="0.66">
+      <div class="act-tag">Act II</div>
+      <h2 class="act-h">The <em>Ascent.</em></h2>
+      <p class="act-p">Seven generations of masons. A century of scaffolding. Stone lifted <strong>one block at a time</strong>, each one cut to a drawing older than the mason holding it.</p>
+    </div>
+
+    <div class="act act-3" data-act="2" data-act-in="0.78" data-act-out="1.01">
+      <div class="act-tag">Act III</div>
+      <h2 class="act-h">The <em>Shadow.</em></h2>
+      <p class="act-p">At dusk the spires dissolve. The cathedral becomes <strong>geometry again</strong> — the same lines Gaudí drew, given back to the dark.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Plate break ─── -->
+<section class="plate-break">
+  <div class="plate-break-inner">
+    <div class="plate-break-rule"></div>
+    <div class="plate-break-eyebrow">Plate Break · № 02</div>
+    <h2 class="plate-break-h">The <em>Taj Mahal.</em></h2>
+    <div class="plate-break-meta">
+      <span>27° 10′ 30″ N</span>
+      <span>78° 02′ 31″ E</span>
+      <span>Agra · Yamuna bank</span>
+      <span>1632 — 1653</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── № 02 · The Taj Mahal ─── -->
+<section class="stage"
+         id="taj-stage"
+         data-frame-src="brand_assets/taj-frames/frame-{n}.jpg"
+         data-frame-count="120"
+         data-darken-start="0.82"
+         data-darken-max="0.80"
+         data-plates="The Marble|The Inlay|The Obsidian">
+  <div class="stage-sticky">
+    <div class="stage-frame-wrap">
+      <canvas class="stage-frame" data-role="canvas" width="960" height="960" aria-label="Taj Mahal transition sequence"></canvas>
+      <div class="stage-darken" data-role="darken"></div>
+
+      <span class="stage-crosshair ch-tl"></span>
+      <span class="stage-crosshair ch-tr"></span>
+      <span class="stage-crosshair ch-bl"></span>
+      <span class="stage-crosshair ch-br"></span>
+    </div>
+
+    <div class="stage-meta">
+      <div class="meta-tl">Frame <b data-role="frame-num">001</b> / 120</div>
+      <div class="meta-tr">Plate <b data-role="plate-num">I</b> — <span data-role="plate-name">The Marble</span></div>
+      <div class="meta-bl">Ustad Ahmad Lahori · architect</div>
+      <div class="meta-br">Elevation · south façade</div>
+    </div>
+
+    <div class="act act-1" data-act="0" data-act-in="0.04" data-act-out="0.30">
+      <div class="act-tag">Act I</div>
+      <h2 class="act-h">The <em>Marble.</em></h2>
+      <p class="act-p">Commissioned by Shah Jahan in <strong>1632</strong> — a mausoleum for Mumtaz, cut from ivory Makrana marble. Drawn in ink before a single stone was quarried.</p>
+    </div>
+
+    <div class="act act-2" data-act="1" data-act-in="0.36" data-act-out="0.66">
+      <div class="act-tag">Act II</div>
+      <h2 class="act-h">The <em>Inlay.</em></h2>
+      <p class="act-p">Twenty-two years. Twenty thousand artisans. Pietra Dura in <strong>lapis, jade, turquoise</strong> — every flower a cut gem laid flush with marble.</p>
+    </div>
+
+    <div class="act act-3" data-act="2" data-act-in="0.78" data-act-out="1.01">
+      <div class="act-tag">Act III</div>
+      <h2 class="act-h">The <em>Obsidian.</em></h2>
+      <p class="act-p">At dusk the marble turns to black. The inlay burns cyan. A monument to grief, <strong>re-rendered in electric light</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Outro ─── -->
+<section class="outro">
+  <div class="outro-grid"></div>
+  <div class="outro-inner">
+    <div class="outro-mark">Fin · 1882 — ongoing</div>
+    <blockquote class="outro-quote">Nothing is invented, for it is written in nature first.</blockquote>
+    <div class="outro-cite">— Antoni Gaudí</div>
+    <div class="outro-links">
+      <a href="#top" class="btn btn-primary">↑ Replay the sequence</a>
+      <a href="index.html" class="btn">← Back to Tester.io</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ─── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <span>Sights · Vol. 01 · Two Landmarks</span>
+    <span>24 fps · 241 plates total</span>
+    <span><a href="index.html">Tester.io →</a></span>
+  </div>
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────
+  //  Multi-stage scroll-driven frame animation.
+  //  Each <section class="stage"> is self-contained:
+  //    data-frame-src      : "path/frame-{n}.jpg"
+  //    data-frame-count    : total frames
+  //    data-darken-start   : 0..1 — progress at which the black overlay starts
+  //    data-darken-max     : 0..1 — max opacity of the overlay
+  //    data-plates         : "I|II|III" names pipe-separated
+  //  Each stage has its own canvas + darken + acts, scoped via [data-role] /
+  //  [data-act] attributes. The shared loader counts frames across all stages.
+  // ─────────────────────────────────────────────
+  (() => {
+    const pad = (n) => String(n).padStart(3, '0');
+
+    const loader    = document.getElementById('loader');
+    const loaderBar = document.getElementById('loaderBar');
+    const loadN     = document.getElementById('loadN');
+    const loadTotal = document.getElementById('loadTotal');
+    const scrollBar = document.getElementById('scrollBar');
+
+    // ── Build stage controllers from data-attributes ──
+    const stages = [];
+    let totalFrames = 0;
+
+    document.querySelectorAll('section.stage').forEach(stageEl => {
+      const total   = parseInt(stageEl.dataset.frameCount, 10);
+      const srcTmpl = stageEl.dataset.frameSrc;
+      const dStart  = parseFloat(stageEl.dataset.darkenStart) || 0.75;
+      const dMax    = parseFloat(stageEl.dataset.darkenMax)   || 0.9;
+      const plates  = (stageEl.dataset.plates || 'I|II|III').split('|');
+      const q       = (sel) => stageEl.querySelector(sel);
+
+      stages.push({
+        el:       stageEl,
+        total, srcTmpl, dStart, dMax, plates,
+        canvas:   q('[data-role="canvas"]'),
+        ctx:      q('[data-role="canvas"]').getContext('2d'),
+        darken:   q('[data-role="darken"]'),
+        frameEl:  q('[data-role="frame-num"]'),
+        plateNum: q('[data-role="plate-num"]'),
+        plateNm:  q('[data-role="plate-name"]'),
+        acts: Array.from(stageEl.querySelectorAll('[data-act]')).map(a => ({
+          el: a,
+          inAt:  parseFloat(a.dataset.actIn),
+          outAt: parseFloat(a.dataset.actOut),
+        })),
+        imgs: new Array(total + 1),
+      });
+      totalFrames += total;
+    });
+
+    if (loadTotal) loadTotal.textContent = totalFrames;
+
+    // ── Preload + loader progress ──
+    let loaded = 0;
+    const updateLoader = () => {
+      loadN.textContent = loaded;
+      const pct = totalFrames > 0 ? (loaded / totalFrames) * 100 : 0;
+      loaderBar.style.setProperty('--w', pct + '%');
+      loaderBar.setAttribute('data-w', '');
+      if (loaded >= totalFrames) loader.classList.add('hidden');
+    };
+
+    const loadOne = (stg, i) => new Promise(res => {
+      const img = new Image();
+      const done = () => { loaded++; updateLoader(); res(img); };
+      img.onload = done; img.onerror = done;
+      img.src = stg.srcTmpl.replace('{n}', pad(i));
+      stg.imgs[i] = img;
+    });
+
+    const loadAll = async () => {
+      // Priority pass — first + last frame of every stage, so each canvas
+      // can paint something immediately when it first comes into view.
+      const pri = stages.flatMap(s => [loadOne(s, 1), loadOne(s, s.total)]);
+      await Promise.all(pri);
+      stages.forEach(s => draw(s, 1));
+
+      // Remaining frames across all stages, 8-way concurrent.
+      const queue = [];
+      stages.forEach(s => { for (let i = 2; i < s.total; i++) queue.push([s, i]); });
+      const workers = Array.from({ length: 8 }, async () => {
+        while (queue.length) {
+          const [s, i] = queue.shift();
+          await loadOne(s, i);
+        }
+      });
+      await Promise.all(workers);
+    };
+
+    // ── Draw frame into a stage's canvas ──
+    const draw = (stg, n) => {
+      const idx = Math.max(1, Math.min(stg.total, n));
+      const img = stg.imgs[idx];
+      if (!img || !img.complete) return;
+      const cw = stg.canvas.width, ch = stg.canvas.height;
+      stg.ctx.clearRect(0, 0, cw, ch);
+      stg.ctx.drawImage(img, 0, 0, cw, ch);
+      stg.frameEl.textContent = pad(idx);
+    };
+
+    // ── Per-stage scroll update ──
+    const updateStage = (stg) => {
+      const rect  = stg.el.getBoundingClientRect();
+      const vh    = window.innerHeight;
+      const total = stg.el.offsetHeight - vh;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const rawProgress = total > 0 ? scrolled / total : 0;
+      // Reserve the last 15% of stage scroll as a sticky-release buffer.
+      const progress = Math.min(1, rawProgress / 0.85);
+
+      const idx = Math.round(1 + progress * (stg.total - 1));
+      draw(stg, idx);
+
+      // Plate label — thirds of the timeline
+      if      (progress < 0.33) { stg.plateNum.textContent = 'I';   stg.plateNm.textContent = stg.plates[0]; }
+      else if (progress < 0.70) { stg.plateNum.textContent = 'II';  stg.plateNm.textContent = stg.plates[1]; }
+      else                      { stg.plateNum.textContent = 'III'; stg.plateNm.textContent = stg.plates[2]; }
+
+      // Acts — toggle each between its in / out thresholds
+      stg.acts.forEach(a => {
+        const on = progress > a.inAt && progress < a.outAt;
+        if (on !== a.el.classList.contains('on')) a.el.classList.toggle('on', on);
+      });
+
+      // Dark finale overlay
+      const range = Math.max(0.01, 1 - stg.dStart);
+      const dark  = Math.max(0, Math.min(1, (progress - stg.dStart) / range)) * stg.dMax;
+      stg.darken.style.opacity = dark.toFixed(3);
+    };
+
+    // ── Raf-throttled global update ──
+    let ticking = false;
+    const update = () => {
+      stages.forEach(updateStage);
+      const vh = window.innerHeight;
+      const pageProgress = (window.scrollY || 0) /
+        Math.max(1, (document.documentElement.scrollHeight - vh));
+      scrollBar.style.width = (pageProgress * 100) + '%';
+      ticking = false;
+    };
+    const onScroll = () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    loadAll();
+    update();
+  })();
+</script>
+
+</body>
+</html>

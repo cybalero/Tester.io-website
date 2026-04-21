@@ -340,8 +340,34 @@
     /* ─── Hero ─── */
     .hero {
       position: relative;
-      padding: 64px 0 var(--section-pad);
+      min-height: 92vh;
+      padding: 140px 0 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       overflow: hidden;
+    }
+    .hero-title {
+      position: relative; z-index: 2;
+      max-width: 1120px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+    .hero-title .hero-h1 {
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Below the hero — everything that used to live in it:
+       the eyebrow row, lede, CTAs, proof, and the console visual. */
+    .hero-below {
+      position: relative;
+      padding: clamp(56px, 8vw, 110px) 0 clamp(48px, 7vw, 100px);
+    }
+    .hero-below .hero-inner {
+      align-items: center;
     }
     .hero-bg {
       position: absolute; inset: 0;
@@ -1039,6 +1065,142 @@
       letter-spacing: 0.14em;
       color: var(--ink-mute);
       text-transform: uppercase;
+    }
+
+    /* ─── Tester Tech ─── */
+    .tech-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-card);
+      padding: clamp(40px, 5vw, 64px) clamp(28px, 4vw, 56px);
+      background:
+        radial-gradient(circle at 80% 10%, rgba(212, 168, 82, .14), transparent 50%),
+        radial-gradient(circle at 20% 90%, rgba(230, 137, 121, .1), transparent 50%),
+        linear-gradient(135deg, #15110B 0%, #0B0908 60%, #1A1510 100%);
+      border: 1px solid rgba(212, 168, 82, .25);
+      box-shadow:
+        0 40px 100px -30px rgba(0, 0, 0, .85),
+        0 0 0 1px rgba(239, 210, 138, .06) inset;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: center;
+    }
+    .tech-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(212, 168, 82, .04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 168, 82, .04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 75% 50%, black 10%, transparent 65%);
+      -webkit-mask-image: radial-gradient(circle at 75% 50%, black 10%, transparent 65%);
+      pointer-events: none;
+    }
+    .tech-card-body { position: relative; z-index: 2; }
+    .tech-card-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .tech-card-label .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px var(--gold);
+    }
+    .tech-card-h {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw + 8px, 56px);
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: var(--space-3);
+    }
+    .tech-card-h em {
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--gold);
+    }
+    .tech-card-p {
+      font-size: var(--fs-body);
+      line-height: 1.7;
+      color: var(--ink-mute);
+      max-width: 52ch;
+      margin-bottom: var(--space-4);
+    }
+    .tech-card-p strong { color: var(--ink-2); font-weight: 500; }
+
+    .tech-card-cta {
+      display: inline-flex; align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .tech-card-note {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    /* Right column — tech chips showcase */
+    .tech-stack {
+      position: relative; z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .tech-tile {
+      padding: 16px 18px;
+      background: rgba(10, 9, 7, .55);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      transition: transform .4s cubic-bezier(.22,1,.36,1), border-color .3s, background .3s;
+    }
+    .tech-tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(212, 168, 82, .4);
+      background: rgba(20, 17, 12, .7);
+    }
+    .tech-tile-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .tech-tile-val {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .tech-tile-val em { font-style: italic; font-weight: 300; color: var(--gold); }
+    .tech-tile-sub {
+      margin-top: 6px;
+      font-size: 11.5px;
+      color: var(--ink-mute);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 860px) {
+      .tech-card { grid-template-columns: 1fr; }
+      .tech-stack { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tech-stack { grid-template-columns: 1fr; }
+      .tech-card-cta { width: 100%; }
+      .tech-card-cta .btn { width: 100%; justify-content: center; }
     }
 
     /* ─── Features ─── */
@@ -1975,6 +2137,194 @@
       .nav-brand img { width: 26px; height: 26px; }
       .btn-nav { padding: 9px 14px; font-size: 12px; }
     }
+
+    /* ══════════════════════════════════════════════
+       SIGHTS TEASER  —  warm travel-editorial palate
+       cleanser against the dark luxury landing page.
+       ══════════════════════════════════════════════ */
+    .sights-teaser {
+      padding-top: 0;
+    }
+    .sights-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-card);
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      gap: 0;
+      background: linear-gradient(135deg, #F5EDDC 0%, #EDE0C5 60%, #E3D1AF 100%);
+      border: 1px solid rgba(212, 168, 82, .25);
+      box-shadow:
+        0 50px 120px -30px rgba(0, 0, 0, .9),
+        0 0 0 1px rgba(245, 237, 220, .04) inset;
+    }
+    .sights-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(166, 75, 62, .08), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(47, 71, 53, .08), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    .sights-media {
+      position: relative;
+      min-height: 480px;
+      overflow: hidden;
+    }
+    .sights-media img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s cubic-bezier(.22,1,.36,1), filter .6s ease;
+      filter: saturate(.92) contrast(1.02);
+    }
+    .sights-card:hover .sights-media img {
+      transform: scale(1.04);
+      filter: saturate(1) contrast(1.04);
+    }
+    /* Warm film-grain overlay + gentle vignette */
+    .sights-media::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 110%, rgba(20, 14, 8, .35), transparent 55%),
+        radial-gradient(ellipse at 50% -10%, rgba(20, 14, 8, .25), transparent 45%);
+      pointer-events: none;
+    }
+    .sights-chip {
+      position: absolute;
+      top: 24px; left: 24px;
+      z-index: 2;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 12px;
+      background: rgba(20, 14, 8, .7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 237, 220, .18);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #EFE6D1;
+    }
+    .sights-chip .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #C27A47;
+      box-shadow: 0 0 8px #C27A47;
+    }
+    .sights-caption {
+      position: absolute;
+      bottom: 22px; left: 24px; right: 24px;
+      z-index: 2;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245, 237, 220, .75);
+    }
+    .sights-caption .no { color: #C27A47; }
+
+    .sights-body {
+      position: relative; z-index: 2;
+      padding: clamp(40px, 5vw, 64px) clamp(28px, 4vw, 56px);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      color: #2A1E10;
+    }
+    .sights-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #8A5A2E;
+      margin-bottom: 18px;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .sights-label .mark {
+      width: 10px; height: 1px;
+      background: #8A5A2E;
+    }
+    .sights-h {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 4vw + 6px, 58px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: #2A1E10;
+      margin-bottom: var(--space-3);
+    }
+    .sights-h em {
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: #A64B3E;
+    }
+    .sights-p {
+      font-family: var(--font-display);
+      font-size: var(--fs-body);
+      line-height: 1.7;
+      color: #4A3624;
+      max-width: 44ch;
+      margin-bottom: var(--space-4);
+    }
+    .sights-p strong { color: #2A1E10; font-weight: 500; font-style: italic; }
+
+    .sights-cta {
+      display: inline-flex; align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    /* Rust-red button, keeps the warm editorial palette */
+    .btn-rust {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #C06052, #9A3A30);
+      color: #FDF6E7;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+      text-decoration: none;
+      border: 1px solid rgba(42, 18, 12, .35);
+      box-shadow:
+        0 12px 28px -6px rgba(156, 58, 48, .55),
+        0 0 0 1px rgba(253, 246, 231, .08) inset;
+      transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, filter .35s;
+    }
+    .btn-rust:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 20px 40px -8px rgba(156, 58, 48, .7),
+        0 0 0 1px rgba(253, 246, 231, .12) inset;
+      filter: saturate(1.1);
+    }
+    .btn-rust:focus-visible { outline: 2px solid #2A1E10; outline-offset: 3px; }
+    .btn-rust:active { transform: translateY(1px); }
+    .btn-rust .arrow { transition: transform .35s cubic-bezier(.22,1,.36,1); }
+    .btn-rust:hover .arrow { transform: translateX(4px); }
+
+    .sights-note {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #8A5A2E;
+    }
+
+    @media (max-width: 860px) {
+      .sights-card { grid-template-columns: 1fr; }
+      .sights-media { min-height: 320px; aspect-ratio: 16 / 9; }
+    }
+    @media (max-width: 480px) {
+      .sights-cta { width: 100%; }
+      .sights-cta .btn-rust { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -2013,6 +2363,8 @@
     <div class="nav-links">
       <a href="#features" class="nav-link">Platform</a>
       <a href="#products" class="nav-link">Products</a>
+      <a href="#tech" class="nav-link">Tech</a>
+      <a href="#sights" class="nav-link">Sights</a>
       <a href="#process" class="nav-link">Process</a>
       <a href="#reviews" class="nav-link">Customers</a>
       <a href="#pricing" class="nav-link">Pricing</a>
@@ -2040,6 +2392,25 @@
     <div class="spot-2"></div>
   </div>
 
+  <!-- Clean hero — only the heading -->
+  <div class="hero-title">
+    <h1 class="hero-h1 display reveal reveal-2">
+      <span class="ln-1">Ship software</span>
+      <span class="ln-1">with quiet</span>
+      <span class="ln-2">
+        <span class="cycle-wrap">
+          <span class="cycle-ghost">confidence.</span>
+          <span class="cycle-word w1">confidence.</span>
+          <span class="cycle-word w2">precision.</span>
+          <span class="cycle-word w3">velocity.</span>
+        </span>
+      </span>
+    </h1>
+  </div>
+</section>
+
+<!-- Everything that used to share the hero: badge row, lede, CTAs, proof, console visual -->
+<section class="hero-below">
   <div class="hero-inner">
     <!-- LEFT -->
     <div>
@@ -2047,19 +2418,6 @@
         <span class="badge"><span class="pin"></span>Issue 04 · Spring Release</span>
         <span class="hero-eyebrow-tag">Est. 2024 — Made for engineers</span>
       </div>
-
-      <h1 class="hero-h1 display reveal reveal-2">
-        <span class="ln-1">Ship software</span>
-        <span class="ln-1">with quiet</span>
-        <span class="ln-2">
-          <span class="cycle-wrap">
-            <span class="cycle-ghost">confidence.</span>
-            <span class="cycle-word w1">confidence.</span>
-            <span class="cycle-word w2">precision.</span>
-            <span class="cycle-word w3">velocity.</span>
-          </span>
-        </span>
-      </h1>
 
       <p class="hero-sub reveal reveal-3">
         Tester.io is the <strong>quality-assurance engine</strong> engineering leaders use to catch regressions early, ship faster, and keep pagers silent — built on a test runner your team will actually enjoy using.
@@ -2450,13 +2808,113 @@
 </section>
 
 <!-- ══════════════════════════════════════════════
+     TESTER TECH
+══════════════════════════════════════════════ -->
+<section id="tech" class="section">
+  <div class="wrap">
+    <div class="section-header">
+      <div>
+        <div class="section-number">§ 03 <span class="sep">—</span> Tester Tech</div>
+        <h2 class="section-h2 display">The engine,<br><em>exposed.</em></h2>
+      </div>
+      <p class="section-desc">A deliberate stack three years in the making — the Rust runner core, the WASM sandbox, the signal processing. See what Tester.io is actually built on.</p>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-card-body">
+        <div class="tech-card-label"><span class="dot"></span>Under the hood</div>
+        <h3 class="tech-card-h">Built to be <em>inspected.</em></h3>
+        <p class="tech-card-p">Every layer of the platform is documented, measured, and open for scrutiny. The <strong>runner core</strong>, the <strong>sandbox</strong>, the <strong>inference stack</strong> — all there to read, benchmark, and extend. No black boxes, no "trust us" architecture diagrams.</p>
+
+        <div class="tech-card-cta">
+          <a href="TesterTech.html" class="btn btn-gold">
+            Explore Tester Tech
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <span class="tech-card-note">Open · documented · benchmarked</span>
+        </div>
+      </div>
+
+      <div class="tech-stack">
+        <div class="tech-tile">
+          <div class="tech-tile-label">Runner</div>
+          <div class="tech-tile-val">Rust <em>core</em></div>
+          <div class="tech-tile-sub">zero-copy, SIMD-vectorised suite execution</div>
+        </div>
+        <div class="tech-tile">
+          <div class="tech-tile-label">Isolation</div>
+          <div class="tech-tile-val">WASM <em>sandbox</em></div>
+          <div class="tech-tile-sub">deterministic, capability-gated by default</div>
+        </div>
+        <div class="tech-tile">
+          <div class="tech-tile-label">Inference</div>
+          <div class="tech-tile-val">Flake <em>model</em></div>
+          <div class="tech-tile-sub">on-device, under 40ms, no data leaves</div>
+        </div>
+        <div class="tech-tile">
+          <div class="tech-tile-label">Pipeline</div>
+          <div class="tech-tile-val">Edge <em>native</em></div>
+          <div class="tech-tile-sub">runs in your CI, no external dependencies</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SIGHTS  ·  an editorial side-project
+══════════════════════════════════════════════ -->
+<section id="sights" class="section sights-teaser">
+  <div class="wrap">
+    <div class="section-header">
+      <div>
+        <div class="section-number">§ +<span class="sep">—</span> Off the Clock</div>
+        <h2 class="section-h2 display">Something <em>quieter.</em></h2>
+      </div>
+      <p class="section-desc">A travel editorial we've been writing between builds. No affiliate links, no itineraries, no top-ten lists — just slow essays and film photographs from places that asked us to stay a little longer.</p>
+    </div>
+
+    <article class="sights-card">
+      <div class="sights-media">
+        <img src="brand_assets/generated/sights-hero.png" alt="Misty Nordic fjord at dawn — Sights editorial preview">
+        <span class="sights-chip"><span class="dot"></span>Vol. 01 · Slow Travel</span>
+        <div class="sights-caption">
+          <span>Nordic fjords <span class="no">№ 01</span></span>
+          <span>Shot on Portra 400</span>
+        </div>
+      </div>
+
+      <div class="sights-body">
+        <div class="sights-label"><span class="mark"></span>A reading room</div>
+        <h3 class="sights-h">The scenic <em>route.</em></h3>
+        <p class="sights-p">Seven essays from seven places we found by accident — a fjord at dawn, a moss path in Kyoto, a riad in Marrakech where nobody was in a hurry. <strong>Written slowly.</strong> Meant to be read the same way.</p>
+
+        <div class="sights-cta">
+          <a href="Sights.html" class="btn-rust">
+            Open Sights
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </a>
+          <span class="sights-note">7 pieces · ~ 40 min read</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
      PROCESS
 ══════════════════════════════════════════════ -->
 <section id="process" class="process">
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 03 <span class="sep">—</span> The Flow</div>
+        <div class="section-number">§ 04 <span class="sep">—</span> The Flow</div>
         <h2 class="section-h2 display">Live in fifteen<br><em>minutes flat.</em></h2>
       </div>
       <p class="section-desc">No onboarding calls. No consultants. Connect your repo, pick your gates, and start catching regressions before lunch.</p>
@@ -2497,7 +2955,7 @@
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 04 <span class="sep">—</span> Field Reports</div>
+        <div class="section-number">§ 05 <span class="sep">—</span> Field Reports</div>
         <h2 class="section-h2 display">Loved by engineers.<br><em>Trusted by leaders.</em></h2>
       </div>
       <p class="section-desc">Read what teams shipping real products — fintech, healthcare, SaaS — say after six months with Tester.io as their quality spine.</p>
@@ -2566,7 +3024,7 @@
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 05 <span class="sep">—</span> Pricing</div>
+        <div class="section-number">§ 06 <span class="sep">—</span> Pricing</div>
         <h2 class="section-h2 display">Fair, flat,<br><em>no surprises.</em></h2>
       </div>
       <p class="section-desc">Per-team, not per-seat. Free while you prototype. Scale without rewriting the contract. Cancel whenever.</p>

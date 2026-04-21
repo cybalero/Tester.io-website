@@ -1,0 +1,2923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tester Tech — Connected Devices, Built Well</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..800&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0A0B0D;
+      --bg-soft:   #0E0F12;
+      --surface:   #14161A;
+      --surface-2: #1C1F24;
+      --surface-3: #262A31;
+      --line:      rgba(255, 255, 255, .08);
+      --line-2:    rgba(255, 255, 255, .14);
+
+      --ink:       #F5F7FA;
+      --ink-2:     #D4D8DF;
+      --ink-mute:  #8A909A;
+      --ink-dim:   #4B5058;
+
+      /* Tech-forward palette: silver + gold accent */
+      --silver:    #C9D1DD;
+      --silver-dim:#7D8693;
+      --mint:      #7CE5B0;
+      --gold:      #D4A852;
+      --gold-hi:   #EFD28A;
+
+      --font-display: "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      --font-ui:      "DM Sans", "Helvetica Neue", Arial, sans-serif;
+      --font-serif:   "Fraunces", "Times New Roman", serif;
+      --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+      --max: 1280px;
+      --pad: clamp(20px, 4.2vw, 48px);
+      --section-pad: clamp(80px, 8.5vw, 120px);
+      --space-2: clamp(10px, 1vw, 14px);
+      --space-3: clamp(14px, 1.6vw, 20px);
+      --space-4: clamp(20px, 2.2vw, 28px);
+      --space-5: clamp(28px, 3vw, 40px);
+      --space-6: clamp(40px, 4.5vw, 56px);
+
+      --fs-body:  clamp(15px, 0.5vw + 13px, 16px);
+      --fs-lead:  clamp(16px, 0.6vw + 14px, 18px);
+      --fs-h3:    clamp(22px, 1vw + 16px, 28px);
+      --fs-h2:    clamp(32px, 3.4vw + 8px, 56px);
+      --fs-h1:    clamp(44px, 5vw + 14px, 96px);
+
+      --radius:    14px;
+      --radius-lg: 22px;
+      --radius-xl: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+    section[id] { scroll-margin-top: 88px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: var(--fs-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--silver); color: #000; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--silver-dim); }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+    .mono {
+      font-family: var(--font-mono);
+      letter-spacing: 0.06em;
+    }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    /* Scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-1 { transition-delay: .06s; }
+    .reveal-2 { transition-delay: .14s; }
+    .reveal-3 { transition-delay: .22s; }
+    .reveal-4 { transition-delay: .30s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ─── Buttons ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 24px;
+      font-family: var(--font-ui);
+      font-size: 14px; font-weight: 600;
+      letter-spacing: -0.01em;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform .3s cubic-bezier(.22,1,.36,1), background .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease;
+      white-space: nowrap;
+    }
+    .btn:focus-visible { outline: 2px solid var(--silver); outline-offset: 3px; }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--ink);
+      color: #000;
+      box-shadow: 0 6px 20px -4px rgba(255, 255, 255, .15);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px -4px rgba(255, 255, 255, .25);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--line-2);
+    }
+    .btn-ghost:hover {
+      border-color: var(--silver);
+      background: rgba(255, 255, 255, .04);
+      transform: translateY(-2px);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-hi), var(--gold));
+      color: #000;
+      box-shadow: 0 8px 24px -4px rgba(212, 168, 82, .4);
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px -4px rgba(212, 168, 82, .55);
+    }
+
+    .btn .arrow { display: inline-flex; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    .btn-xl { padding: 16px 28px; font-size: 15px; }
+    .btn-sm { padding: 10px 18px; font-size: 13px; }
+
+    /* ─── Nav ─── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 80;
+      padding: 14px 0;
+      background: rgba(10, 11, 13, .7);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-4);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+    .nav-brand .mark {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--silver), var(--silver-dim));
+      display: flex; align-items: center; justify-content: center;
+      color: #000; font-weight: 800; font-size: 13px;
+    }
+    .nav-brand .sep {
+      color: var(--ink-dim);
+      font-weight: 300;
+      padding: 0 2px;
+    }
+    .nav-brand .sub {
+      color: var(--silver);
+      font-weight: 500;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+    }
+    .nav-link {
+      padding: 8px 14px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--ink-2);
+      border-radius: 999px;
+      transition: color .2s, background .2s;
+    }
+    .nav-link:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, .05);
+    }
+    .nav-actions {
+      display: flex; align-items: center; gap: var(--space-3);
+    }
+    .nav-back {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+    .nav-back:hover { color: var(--silver); }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative;
+      padding: 120px 0 var(--section-pad);
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .hero-bg .ambient {
+      position: absolute; inset: 0;
+      background: url("brand_assets/generated/hero-bg.png") center/cover no-repeat;
+      opacity: .22;
+      mask-image: radial-gradient(ellipse at 70% 40%, black 10%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at 70% 40%, black 10%, transparent 75%);
+      mix-blend-mode: screen;
+    }
+    .hero-bg .halo {
+      position: absolute;
+      top: -200px; right: -200px;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(201, 209, 221, .08) 0%, transparent 60%);
+      border-radius: 50%;
+    }
+    .hero-bg .grid-pattern {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse at 50% 40%, black 10%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 10%, transparent 70%);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px 6px 10px;
+      background: rgba(124, 229, 176, .08);
+      border: 1px solid rgba(124, 229, 176, .25);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mint);
+      margin-bottom: var(--space-4);
+    }
+    .hero-tag .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 8px var(--mint);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .55; transform: scale(1.2); }
+    }
+
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h1);
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      line-height: 0.95;
+      color: var(--ink);
+      margin-bottom: var(--space-4);
+    }
+    .hero-h1 .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--silver);
+      letter-spacing: -0.03em;
+    }
+
+    .hero-lede {
+      font-size: var(--fs-lead);
+      line-height: 1.55;
+      color: var(--ink-mute);
+      max-width: 480px;
+      margin-bottom: var(--space-5);
+    }
+    .hero-lede strong { color: var(--ink-2); font-weight: 500; }
+
+    .hero-ctas {
+      display: flex; align-items: center; gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-5);
+    }
+
+    .hero-meta {
+      display: flex; gap: var(--space-5);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--line);
+      max-width: 500px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item { flex: 1; min-width: 120px; }
+    .hero-meta-v {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .hero-meta-v .unit { color: var(--silver); font-weight: 500; }
+    .hero-meta-l {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    /* Hero image */
+    .hero-image {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      max-width: 520px;
+      margin-left: auto;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--line);
+      box-shadow:
+        0 40px 100px -20px rgba(0, 0, 0, .8),
+        0 20px 60px -20px rgba(201, 209, 221, .15),
+        0 0 0 1px rgba(255, 255, 255, .04) inset;
+    }
+    .hero-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scale(1.08);
+      animation: heroPan 14s ease-in-out infinite alternate;
+    }
+    @keyframes heroPan {
+      0%   { transform: scale(1.08) translate(-1%, -0.5%); }
+      100% { transform: scale(1.14) translate(1%, 0.5%); }
+    }
+    .hero-image-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 22px 24px;
+      pointer-events: none;
+    }
+    .hero-image-badge {
+      align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 10px;
+      background: rgba(10, 11, 13, .7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .hero-image-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 6px var(--mint);
+    }
+    .hero-image-price {
+      align-self: flex-end;
+      display: inline-flex; align-items: baseline; gap: 6px;
+      padding: 10px 16px;
+      background: rgba(10, 11, 13, .8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 12px;
+      font-family: var(--font-display);
+      color: var(--ink);
+    }
+    .hero-image-price .from {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+    .hero-image-price .val {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── Marquee ─── */
+    .trust-bar {
+      padding: var(--space-5) 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--bg-soft);
+    }
+    .trust-bar-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--space-5);
+      align-items: center;
+    }
+    .trust-bar-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .trust-list {
+      display: flex; gap: var(--space-5);
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--silver-dim);
+      letter-spacing: -0.01em;
+    }
+    .trust-list span { transition: color .3s ease; }
+    .trust-list span:hover { color: var(--ink); }
+
+    /* ─── Section header ─── */
+    .sec-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--line);
+    }
+    .sec-head-left { max-width: 680px; }
+    .sec-h {
+      font-family: var(--font-display);
+      font-size: var(--fs-h2);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      color: var(--ink);
+      margin-top: 12px;
+    }
+    .sec-h .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--silver);
+    }
+    .sec-desc {
+      margin-top: 12px;
+      max-width: 42ch;
+      color: var(--ink-mute);
+      font-size: var(--fs-body);
+      line-height: 1.6;
+    }
+
+    /* ─── Categories ─── */
+    .categories { padding: var(--section-pad) 0; }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .cat {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      aspect-ratio: 3 / 4;
+      cursor: pointer;
+      transition: transform .5s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .3s;
+    }
+    .cat:hover {
+      transform: translateY(-6px);
+      border-color: var(--line-2);
+      box-shadow: 0 40px 80px -20px rgba(0,0,0,.7);
+    }
+    .cat img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .7s cubic-bezier(.22,1,.36,1);
+      opacity: .85;
+    }
+    .cat:hover img { transform: scale(1.06); opacity: 1; }
+    .cat::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 11, 13, .95) 100%);
+      pointer-events: none;
+    }
+    .cat-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: var(--space-4);
+      z-index: 2;
+    }
+    .cat-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 10px;
+    }
+    .cat-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .cat-count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink-mute);
+      letter-spacing: 0.08em;
+    }
+    .cat-arrow {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .1);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--line-2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+      z-index: 2;
+      transition: background .3s ease, transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .cat:hover .cat-arrow {
+      background: var(--ink);
+      color: #000;
+      transform: translate(3px, -3px);
+    }
+
+    /* ─── Feature rows (alternating) ─── */
+    .feature {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+    }
+    .feature-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: center;
+    }
+    .feature.reversed .feature-inner > :first-child { order: 2; }
+
+    .feature-image {
+      position: relative;
+      aspect-ratio: 5 / 4;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .7);
+    }
+    .feature-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s ease;
+    }
+    .feature:hover .feature-image img { transform: scale(1.04); }
+
+    .feature-body { }
+    .feature-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: var(--space-3);
+    }
+    .feature-eyebrow .d {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--silver);
+    }
+    .feature-eyebrow.mint .d { background: var(--mint); box-shadow: 0 0 6px var(--mint); }
+    .feature-eyebrow.gold .d { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+    .feature-eyebrow.mint { color: var(--mint); border-color: rgba(124, 229, 176, .25); background: rgba(124, 229, 176, .06); }
+    .feature-eyebrow.gold { color: var(--gold-hi); border-color: rgba(212, 168, 82, .3); background: rgba(212, 168, 82, .06); }
+
+    .feature-h {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 2.6vw + 10px, 44px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: var(--space-3);
+    }
+    .feature-h .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--silver);
+    }
+    .feature-p {
+      font-size: var(--fs-lead);
+      line-height: 1.55;
+      color: var(--ink-mute);
+      margin-bottom: var(--space-4);
+    }
+    .feature-p strong { color: var(--ink-2); font-weight: 500; }
+
+    .feature-specs {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 24px;
+      margin-bottom: var(--space-4);
+      padding: var(--space-4) 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .feature-specs li {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--ink-2);
+      display: flex; flex-direction: column;
+    }
+    .feature-specs li span {
+      color: var(--ink-mute);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 2px;
+    }
+
+    .feature-ctas {
+      display: flex; gap: var(--space-3); flex-wrap: wrap;
+      align-items: center;
+    }
+    .feature-price {
+      margin-right: auto;
+      font-family: var(--font-display);
+      font-size: 14px;
+      color: var(--ink-mute);
+    }
+    .feature-price b {
+      display: block;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+    }
+
+    /* ─── Stats band ─── */
+    .stats {
+      padding: var(--space-6) 0;
+      background: var(--bg-soft);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .stats-grid {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+    }
+    .stat {
+      padding: var(--space-3) var(--space-3);
+      border-right: 1px solid var(--line);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-v {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 3vw + 10px, 54px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .stat-v em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--silver);
+    }
+    .stat-v .unit {
+      font-size: 0.55em;
+      color: var(--silver);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .stat-l {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    /* ─── CTA ─── */
+    .cta-wrap { padding: var(--section-pad) 0; }
+    .cta {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: clamp(40px, 5vw, 80px) clamp(28px, 4vw, 60px);
+      background:
+        radial-gradient(circle at 80% 20%, rgba(201, 209, 221, .12), transparent 55%),
+        radial-gradient(circle at 20% 80%, rgba(124, 229, 176, .1), transparent 55%),
+        linear-gradient(135deg, #16191D 0%, #0A0B0D 60%, #14181D 100%);
+      border: 1px solid var(--line-2);
+      text-align: center;
+    }
+    .cta::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("brand_assets/generated/tech-texture.png") center/cover no-repeat;
+      opacity: .14;
+      mix-blend-mode: screen;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%);
+      pointer-events: none;
+    }
+    .cta::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; }
+    .cta-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .02);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: var(--space-4);
+    }
+    .cta-h {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4vw + 10px, 68px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: var(--space-3);
+    }
+    .cta-h .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--silver);
+    }
+    .cta-p {
+      font-size: var(--fs-lead);
+      line-height: 1.55;
+      color: var(--ink-mute);
+      max-width: 540px;
+      margin: 0 auto var(--space-5);
+    }
+    .cta-ctas {
+      display: flex; justify-content: center; gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-4);
+    }
+    .cta-form {
+      display: flex; max-width: 480px; margin: 0 auto;
+      gap: 8px;
+      padding: 6px;
+      background: rgba(10, 11, 13, .6);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+    }
+    .cta-input {
+      flex: 1;
+      background: transparent;
+      border: none; outline: none;
+      padding: 10px 18px;
+      color: var(--ink);
+      font-family: var(--font-ui);
+      font-size: 14px;
+    }
+    .cta-input::placeholder { color: var(--ink-mute); }
+    .cta-note {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      color: var(--ink-dim);
+      text-transform: uppercase;
+      margin-top: var(--space-4);
+    }
+    .cta-note .sep { color: var(--silver); margin: 0 8px; }
+
+    /* ─── Footer ─── */
+    .footer {
+      padding: var(--space-6) 0 var(--space-5);
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .footer-inner {
+      max-width: var(--max); margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: var(--space-5);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--line);
+    }
+    .footer-brand-row {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .footer-brand-row .mark {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--silver), var(--silver-dim));
+      display: flex; align-items: center; justify-content: center;
+      color: #000; font-weight: 800; font-size: 14px;
+    }
+    .footer-brand-row .sub { color: var(--silver); font-weight: 500; }
+    .footer-desc {
+      max-width: 320px;
+      color: var(--ink-mute);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+    .footer-socials { display: flex; gap: 8px; }
+    .soc {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink-mute);
+      transition: color .2s, border-color .2s, background .2s, transform .2s;
+    }
+    .soc:hover {
+      color: var(--ink);
+      border-color: var(--line-2);
+      background: var(--surface-2);
+      transform: translateY(-2px);
+    }
+
+    .footer-col-h {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a {
+      font-size: 13.5px;
+      color: var(--ink-2);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--silver); }
+
+    .footer-bot {
+      padding-top: var(--space-4);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--ink-dim);
+      text-transform: uppercase;
+    }
+    .footer-legal {
+      display: flex; gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .footer-legal a {
+      color: var(--ink-dim);
+      transition: color .2s;
+    }
+    .footer-legal a:hover { color: var(--silver); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr; gap: var(--space-6); }
+      .hero-image { margin: 0 auto; max-width: 480px; width: 100%; }
+      .feature-inner { grid-template-columns: 1fr; }
+      .feature.reversed .feature-inner > :first-child { order: 0; }
+      .cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat { border-right: none; border-bottom: 1px solid var(--line); padding: var(--space-4) var(--space-3); }
+      .stat:nth-last-child(-n+2) { border-bottom: none; }
+      .stat:nth-child(odd) { border-right: 1px solid var(--line); }
+    }
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .nav-back { display: none; }
+      .trust-bar-inner { grid-template-columns: 1fr; text-align: center; }
+      .trust-list { justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 100px 0 var(--section-pad); }
+      .hero-meta { gap: var(--space-4); }
+      .cat-grid { grid-template-columns: 1fr; }
+      .feature-specs { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat { border-right: none !important; }
+      .stat:nth-last-child(n+2) { border-bottom: 1px solid var(--line); }
+      .btn { min-height: 48px; padding: 14px 22px; }
+      .hero-ctas, .feature-ctas, .cta-ctas { flex-direction: column; align-items: stretch; }
+      .hero-ctas .btn, .feature-ctas .btn, .cta-ctas .btn { width: 100%; justify-content: center; }
+      .cta-form { flex-direction: column; border-radius: var(--radius); }
+      .cta-input { width: 100%; padding: 12px 16px; }
+      .cta-form .btn { width: 100%; justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bot { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 380px) {
+      .nav-brand .sub { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════
+       EXTRA SECTIONS: Pillars · Configurator ·
+       Comparison · Reviews · Awards · FAQ
+       ══════════════════════════════════════════════ */
+
+    /* ─── Scroll progress bar ─── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0%;
+      background: linear-gradient(90deg, var(--gold-hi), var(--gold));
+      z-index: 90;
+      transition: width .08s linear;
+      box-shadow: 0 0 10px rgba(212, 168, 82, .6);
+    }
+
+    /* ─── Pillars ("Why Tester") ─── */
+    .pillars {
+      padding: var(--section-pad) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .pillars::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(212, 168, 82, .05), transparent 60%),
+        url("brand_assets/generated/pillars-bg.png") center/cover no-repeat;
+      background-blend-mode: normal, screen;
+      opacity: .18;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 30%, transparent 85%);
+      pointer-events: none;
+    }
+    .pillars-inner { position: relative; z-index: 1; }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .pillar {
+      padding: var(--space-5) var(--space-4);
+      background: var(--bg);
+      transition: background .4s ease;
+      position: relative;
+    }
+    .pillar:hover { background: var(--surface); }
+    .pillar:hover .pillar-ico { color: var(--gold); transform: translateY(-2px); }
+    .pillar-ico {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: rgba(212, 168, 82, .08);
+      border: 1px solid rgba(212, 168, 82, .18);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--silver);
+      margin-bottom: var(--space-3);
+      transition: color .3s ease, transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .pillar-num {
+      position: absolute;
+      top: 18px; right: 20px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--ink-dim);
+    }
+    .pillar-h {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .pillar-p {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink-mute);
+    }
+
+    /* ─── Configurator ─── */
+    .configure {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+      background: var(--bg-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .configure::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 20%, transparent 75%);
+    }
+    .configure-inner {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: center;
+    }
+    .configure-preview {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, #1E232A 0%, #0B0C0F 70%);
+      border: 1px solid var(--line-2);
+      box-shadow:
+        0 60px 120px -30px rgba(0,0,0,.9),
+        0 0 0 1px rgba(255,255,255,.03) inset;
+    }
+    .configure-preview::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(212, 168, 82, .18), transparent 45%);
+      opacity: 0;
+      transition: opacity .6s ease;
+      pointer-events: none;
+    }
+    .configure-preview[data-case="gold"]::after { opacity: 1; }
+    .configure-preview[data-case="silver"]::after {
+      opacity: .8;
+      background: radial-gradient(circle at 50% 40%, rgba(201, 209, 221, .18), transparent 45%);
+    }
+    .configure-preview[data-case="graphite"]::after {
+      opacity: .7;
+      background: radial-gradient(circle at 50% 40%, rgba(80, 90, 105, .25), transparent 45%);
+    }
+    .configure-preview-img {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .configure-preview-img img {
+      width: 78%; height: 78%;
+      object-fit: contain;
+      filter: drop-shadow(0 30px 40px rgba(0,0,0,.6));
+      transition: filter .5s ease, transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .configure-preview[data-case="gold"] .configure-preview-img img {
+      filter:
+        drop-shadow(0 30px 40px rgba(0,0,0,.6))
+        drop-shadow(0 0 24px rgba(212, 168, 82, .45))
+        hue-rotate(15deg) saturate(1.4) brightness(1.08);
+    }
+    .configure-preview[data-case="silver"] .configure-preview-img img {
+      filter:
+        drop-shadow(0 30px 40px rgba(0,0,0,.6))
+        saturate(.2) brightness(1.12);
+    }
+    .configure-preview[data-case="graphite"] .configure-preview-img img {
+      filter:
+        drop-shadow(0 30px 40px rgba(0,0,0,.6))
+        saturate(.1) brightness(.72) contrast(1.1);
+    }
+    .configure-preview-chip {
+      position: absolute;
+      top: 20px; left: 20px;
+      padding: 7px 12px;
+      background: rgba(10, 11, 13, .75);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--line-2);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--silver);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .configure-preview-chip .swatch {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+      transition: background .3s, box-shadow .3s;
+    }
+    .configure-preview[data-case="silver"] .configure-preview-chip .swatch {
+      background: var(--silver); box-shadow: 0 0 6px var(--silver);
+    }
+    .configure-preview[data-case="graphite"] .configure-preview-chip .swatch {
+      background: #4a525d; box-shadow: 0 0 6px #4a525d;
+    }
+    .configure-preview-sum {
+      position: absolute;
+      bottom: 20px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 16px;
+      padding: 16px 18px;
+      background: rgba(10, 11, 13, .7);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius);
+    }
+    .configure-preview-sum .label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 4px;
+    }
+    .configure-preview-sum .value {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .configure-preview-sum .price {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+    .configure-preview-sum .price em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold-hi);
+      font-size: 16px;
+      margin-right: 4px;
+    }
+
+    .configure-body .opt-group { margin-bottom: var(--space-4); }
+    .configure-body .opt-h {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .configure-body .opt-h .lbl {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+    .configure-body .opt-h .val {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .opt-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      cursor: pointer;
+      padding: 10px 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-2);
+      transition: border-color .25s, background .25s, color .25s, transform .25s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .chip:hover { border-color: var(--line-2); background: var(--surface-2); color: var(--ink); }
+    .chip[aria-pressed="true"] {
+      border-color: var(--gold);
+      background: rgba(212, 168, 82, .1);
+      color: var(--gold-hi);
+    }
+    .chip .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    .chip .dot.c-gold     { background: linear-gradient(135deg, var(--gold-hi), var(--gold)); }
+    .chip .dot.c-silver   { background: linear-gradient(135deg, #E4EAF2, var(--silver-dim)); }
+    .chip .dot.c-graphite { background: linear-gradient(135deg, #3B424C, #161B22); }
+    .chip .dot.c-mint     { background: var(--mint); }
+    .chip .dot.c-tan      { background: #C9A27E; }
+    .chip .dot.c-noir     { background: #1A1C20; }
+
+    .configure-foot {
+      margin-top: var(--space-5);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--line);
+      display: flex; flex-wrap: wrap; gap: var(--space-3);
+      align-items: center;
+    }
+    .configure-engrave {
+      flex: 1; min-width: 220px;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      transition: border-color .25s;
+    }
+    .configure-engrave:focus-within { border-color: var(--gold); }
+    .configure-engrave svg { color: var(--gold); flex-shrink: 0; }
+    .configure-engrave input {
+      flex: 1; min-width: 0;
+      background: transparent; border: none; outline: none;
+      color: var(--ink);
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+    .configure-engrave input::placeholder { color: var(--ink-dim); font-style: italic; }
+
+    /* ─── Comparison Table ─── */
+    .compare {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+    }
+    .compare-tbl-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+    }
+    .compare-tbl {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+    }
+    .compare-tbl th,
+    .compare-tbl td {
+      padding: 18px 22px;
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--line);
+    }
+    .compare-tbl thead th {
+      padding: 24px 22px 22px;
+      background: var(--surface-2);
+      vertical-align: bottom;
+    }
+    .compare-tbl thead th:first-child {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      font-weight: 500;
+    }
+    .compare-model {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .compare-model .tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+    .compare-model .name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .compare-model .name .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold-hi);
+    }
+    .compare-model .price {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+    .compare-tbl th.featured {
+      background: linear-gradient(180deg, rgba(212, 168, 82, .12), rgba(212, 168, 82, .03));
+      position: relative;
+    }
+    .compare-tbl th.featured::after {
+      content: "Most loved";
+      position: absolute;
+      top: -10px; left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 10px;
+      background: linear-gradient(135deg, var(--gold-hi), var(--gold));
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .compare-tbl td.featured {
+      background: rgba(212, 168, 82, .04);
+    }
+    .compare-tbl tbody th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      font-weight: 500;
+      background: var(--surface);
+    }
+    .compare-tbl tbody td {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: var(--ink-2);
+    }
+    .compare-tbl tr:last-child td,
+    .compare-tbl tr:last-child th { border-bottom: none; }
+    .compare-tbl .y { color: var(--mint); font-weight: 600; }
+    .compare-tbl .n { color: var(--ink-dim); }
+
+    .compare-foot {
+      margin-top: var(--space-4);
+      display: flex; gap: var(--space-3); flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ─── Reviews ─── */
+    .reviews {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+      background: var(--bg-soft);
+    }
+    .reviews-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-5);
+      align-items: flex-end;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--line);
+    }
+    .reviews-score {
+      text-align: right;
+    }
+    .reviews-score .val {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .reviews-score .val em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold-hi);
+    }
+    .reviews-score .stars {
+      color: var(--gold);
+      letter-spacing: 3px;
+      margin: 8px 0 4px;
+      font-size: 16px;
+    }
+    .reviews-score .count {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .review {
+      padding: var(--space-5) var(--space-4);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      display: flex; flex-direction: column;
+      gap: var(--space-3);
+      transition: border-color .3s, transform .4s cubic-bezier(.22,1,.36,1), box-shadow .4s;
+    }
+    .review:hover {
+      border-color: var(--line-2);
+      transform: translateY(-4px);
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,.6);
+    }
+    .review-top {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .review-stars { color: var(--gold); letter-spacing: 2px; font-size: 13px; }
+    .review-verified {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mint);
+    }
+    .review-verified::before {
+      content: "";
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 6px var(--mint);
+    }
+    .review-quote {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 60;
+      line-height: 1.4;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+    .review-quote::before {
+      content: "“";
+      font-family: var(--font-serif);
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--gold);
+      line-height: 0;
+      margin-right: 4px;
+      vertical-align: -8px;
+    }
+    .review-body {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--ink-mute);
+      flex: 1;
+    }
+    .review-foot {
+      display: flex; align-items: center; gap: 12px;
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--line);
+    }
+    .review-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--surface-3), var(--surface-2));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gold-hi);
+      border: 1px solid var(--line-2);
+      flex-shrink: 0;
+    }
+    .review-name {
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .review-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--ink-dim);
+      margin-top: 2px;
+    }
+
+    /* ─── Awards / Press ─── */
+    .awards {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+    }
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .award {
+      padding: var(--space-5) var(--space-4);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .3s, transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .award:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .award::before {
+      content: "";
+      position: absolute;
+      top: -50%; right: -30%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(212, 168, 82, .08), transparent 60%);
+      pointer-events: none;
+    }
+    .award-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: var(--space-4);
+      gap: var(--space-3);
+    }
+    .award-outlet {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .award-date {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .award-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: rgba(212, 168, 82, .08);
+      border: 1px solid rgba(212, 168, 82, .25);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-hi);
+      margin-bottom: var(--space-3);
+    }
+    .award-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--ink-2);
+      letter-spacing: -0.005em;
+    }
+    .award-author {
+      margin-top: var(--space-3);
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+
+    /* ─── FAQ ─── */
+    .faq {
+      padding: var(--section-pad) 0;
+      border-top: 1px solid var(--line);
+      background: var(--bg-soft);
+    }
+    .faq-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+      gap: var(--space-6);
+      align-items: flex-start;
+    }
+    .faq-aside .eyebrow { margin-bottom: var(--space-3); }
+    .faq-aside h2 {
+      font-family: var(--font-display);
+      font-size: var(--fs-h2);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      color: var(--ink);
+      margin-bottom: var(--space-3);
+    }
+    .faq-aside h2 .serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--silver);
+    }
+    .faq-aside p {
+      color: var(--ink-mute);
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+    }
+    .faq-contact {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 18px;
+      background: var(--surface);
+      border: 1px solid var(--line-2);
+      border-radius: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      transition: border-color .25s, background .25s;
+    }
+    .faq-contact:hover { border-color: var(--gold); background: var(--surface-2); }
+    .faq-contact svg { color: var(--gold); }
+
+    .faq-list {
+      display: flex; flex-direction: column;
+      gap: 10px;
+    }
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .3s;
+    }
+    .faq-item[open] { border-color: var(--line-2); }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 20px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: var(--space-3);
+      font-family: var(--font-display);
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      user-select: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item .q-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(212, 168, 82, .08);
+      border: 1px solid rgba(212, 168, 82, .2);
+      color: var(--gold);
+      flex-shrink: 0;
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    .faq-item[open] .q-icon { transform: rotate(45deg); }
+    .faq-item .a {
+      padding: 0 22px 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--ink-mute);
+      animation: faqOpen .4s cubic-bezier(.22,1,.36,1);
+    }
+    .faq-item .a strong { color: var(--ink-2); font-weight: 500; }
+    @keyframes faqOpen {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Extra responsive ─── */
+    @media (max-width: 1100px) {
+      .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+      .configure-inner { grid-template-columns: 1fr; }
+      .configure-preview { max-width: 520px; margin: 0 auto; width: 100%; }
+      .reviews-grid { grid-template-columns: repeat(2, 1fr); }
+      .awards-grid { grid-template-columns: 1fr; }
+      .faq-inner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .pillars-grid { grid-template-columns: 1fr; }
+      .reviews-head { grid-template-columns: 1fr; }
+      .reviews-score { text-align: left; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .configure-foot { flex-direction: column; align-items: stretch; }
+      .configure-foot .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ══════════════════════════════════════════════
+     NAV
+══════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <div class="mark">T</div>
+      Tester <span class="sep">/</span> <span class="sub">Tech</span>
+    </a>
+    <div class="nav-links">
+      <a href="#watches" class="nav-link">Watches</a>
+      <a href="#glasses" class="nav-link">Glasses</a>
+      <a href="#assistants" class="nav-link">Assistants</a>
+      <a href="#configure" class="nav-link">Configure</a>
+      <a href="#compare" class="nav-link">Compare</a>
+      <a href="#reviews" class="nav-link">Reviews</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-back">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Main site
+      </a>
+      <a href="#cta" class="btn btn-primary btn-sm">
+        Shop
+        <span class="arrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="ambient"></div>
+    <div class="grid-pattern"></div>
+    <div class="halo"></div>
+  </div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag"><span class="dot"></span>Spring Lineup · Live Now</div>
+
+      <h1 class="hero-h1">
+        Connected devices,<br>
+        <span class="serif">built well.</span>
+      </h1>
+
+      <p class="hero-lede">
+        Wrist, face, voice, home. Every Tester device is engineered to the same standard — open firmware, repair-first design, <strong>no telemetry leaving your network</strong>. Curated, not catalogued.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="#watches" class="btn btn-primary btn-xl">
+          Shop the lineup
+          <span class="arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+        <a href="product.html" class="btn btn-ghost btn-xl">
+          See Smart Watch Pro
+        </a>
+      </div>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="hero-meta-v">12<span class="unit"> devices</span></div>
+          <div class="hero-meta-l">In the lineup</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-v">48<span class="unit"> hours</span></div>
+          <div class="hero-meta-l">Free shipping</div>
+        </div>
+        <div class="hero-meta-item">
+          <div class="hero-meta-v">30<span class="unit"> days</span></div>
+          <div class="hero-meta-l">Try at home</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <img src="brand_assets/watch-frames/frame-12.webp" alt="Tester Smart Watch Pro">
+      <div class="hero-image-overlay">
+        <span class="hero-image-badge"><span class="dot"></span>New · Ships Q3</span>
+        <div class="hero-image-price">
+          <span>
+            <div class="from">Starting at</div>
+            <div class="val">$499</div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TRUST BAR
+══════════════════════════════════════════════ -->
+<section class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-bar-label">As seen in</div>
+    <div class="trust-list">
+      <span>The Verge</span>
+      <span>Wired</span>
+      <span>Wirecutter</span>
+      <span>Engadget</span>
+      <span>TechCrunch</span>
+      <span>MKBHD</span>
+      <span>iFixit</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PILLARS  ·  "Why Tester"
+══════════════════════════════════════════════ -->
+<section id="why" class="pillars">
+  <div class="wrap pillars-inner">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="eyebrow">§ 00 — The Tester Difference</div>
+        <h2 class="sec-h">Built for people who <span class="serif">read the spec sheet.</span></h2>
+      </div>
+      <p class="sec-desc">Four commitments, made in public. We ship the product we'd want to own ten years from now — not the one a quarterly meeting asked for.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar reveal reveal-1">
+        <span class="pillar-num">01</span>
+        <div class="pillar-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <h3 class="pillar-h">No telemetry home</h3>
+        <p class="pillar-p">Everything runs on-device. Your data never leaves your network — unless you turn it on, line by line.</p>
+      </div>
+
+      <div class="pillar reveal reveal-2">
+        <span class="pillar-num">02</span>
+        <div class="pillar-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+        <h3 class="pillar-h">Repair, don't replace</h3>
+        <p class="pillar-p">Every device ships with a repair manual, part numbers, and a five-year parts guarantee. Torx, not tape.</p>
+      </div>
+
+      <div class="pillar reveal reveal-3">
+        <span class="pillar-num">03</span>
+        <div class="pillar-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+        </div>
+        <h3 class="pillar-h">Open firmware</h3>
+        <p class="pillar-p">Sideload your own builds. Our toolchain is on GitHub, our bootloader unlocks with a command, not a lawyer.</p>
+      </div>
+
+      <div class="pillar reveal reveal-4">
+        <span class="pillar-num">04</span>
+        <div class="pillar-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
+        </div>
+        <h3 class="pillar-h">Try at home, 30 days</h3>
+        <p class="pillar-p">Live with it. If a single device — or the whole kit — isn't earning its keep, ship it back. No restocking nonsense.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CATEGORIES
+══════════════════════════════════════════════ -->
+<section id="categories" class="categories">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="eyebrow">§ 01 — Categories</div>
+        <h2 class="sec-h">Pick a <span class="serif">surface.</span></h2>
+      </div>
+      <p class="sec-desc">Four form factors. One shared firmware platform. Everything talks to everything else — without talking to anyone else.</p>
+    </div>
+
+    <div class="cat-grid">
+      <a href="#watches" class="cat reveal reveal-1">
+        <div class="cat-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <img src="brand_assets/watch-frames/frame-01.webp" alt="Tester Smart Watch Pro">
+        <div class="cat-body">
+          <div class="cat-tag">Wrist</div>
+          <div class="cat-name">Smart Watches</div>
+          <div class="cat-count">3 models · from $299</div>
+        </div>
+      </a>
+
+      <a href="#glasses" class="cat reveal reveal-2">
+        <div class="cat-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <img src="brand_assets/generated/glasses-card.png" alt="Tester Smart Glasses">
+        <div class="cat-body">
+          <div class="cat-tag">Face</div>
+          <div class="cat-name">Smart Glasses</div>
+          <div class="cat-count">2 models · from $449</div>
+        </div>
+      </a>
+
+      <a href="#assistants" class="cat reveal reveal-3">
+        <div class="cat-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <img src="brand_assets/generated/assistant-card.png" alt="Tester Smart Assistant">
+        <div class="cat-body">
+          <div class="cat-tag">Voice</div>
+          <div class="cat-name">Assistants</div>
+          <div class="cat-count">2 models · from $199</div>
+        </div>
+      </a>
+
+      <a href="#home" class="cat reveal reveal-4">
+        <div class="cat-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </div>
+        <img src="brand_assets/generated/hub-card.png" alt="Tester Smart Home Hub">
+        <div class="cat-body">
+          <div class="cat-tag">Ambient</div>
+          <div class="cat-name">Home Hub</div>
+          <div class="cat-count">5 models · from $79</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 1: Smart Watch Pro
+══════════════════════════════════════════════ -->
+<section id="watches" class="feature">
+  <div class="wrap">
+    <div class="feature-inner">
+      <div class="feature-image reveal">
+        <img src="brand_assets/watch-frames/frame-24.webp" alt="Smart Watch Pro exploded view">
+      </div>
+      <div class="feature-body reveal reveal-1">
+        <div class="feature-eyebrow gold"><span class="d"></span>§ 02 · Wrist</div>
+        <h3 class="feature-h">Smart Watch <span class="serif">Pro.</span></h3>
+        <p class="feature-p">Aerospace titanium, sapphire crystal, and a <strong>48-hour battery</strong> that finally means what it says. Medical-grade ECG, SpO₂, dual-band GPS — every sensor earns its place.</p>
+
+        <ul class="feature-specs">
+          <li><span>Case</span>Grade 5 Ti · 40mm</li>
+          <li><span>Display</span>1.78" AMOLED · 2500 nit</li>
+          <li><span>Battery</span>48h active · 7d ambient</li>
+          <li><span>Rating</span>5 ATM · IP6X</li>
+        </ul>
+
+        <div class="feature-ctas">
+          <span class="feature-price">From<b>$499</b></span>
+          <a href="product.html" class="btn btn-gold">
+            Explore Pro
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="#cta" class="btn btn-ghost">Compare models</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 2: Smart Glasses (reversed)
+══════════════════════════════════════════════ -->
+<section id="glasses" class="feature reversed">
+  <div class="wrap">
+    <div class="feature-inner">
+      <div class="feature-image reveal">
+        <img src="brand_assets/generated/glasses-worn.png" alt="Tester Smart Glasses">
+      </div>
+      <div class="feature-body reveal reveal-1">
+        <div class="feature-eyebrow mint"><span class="d"></span>§ 03 · Face</div>
+        <h3 class="feature-h">Smart <span class="serif">Glasses.</span></h3>
+        <p class="feature-p">A 720p waveguide display that actually <strong>disappears</strong> when you're not looking at it. Open-ear audio, 12MP camera, 8-hour battery. Clear prescription inserts available.</p>
+
+        <ul class="feature-specs">
+          <li><span>Display</span>720p waveguide · both eyes</li>
+          <li><span>Battery</span>8h mixed · 14d standby</li>
+          <li><span>Weight</span>38g · Ti temples</li>
+          <li><span>Camera</span>12MP · 1080p60 video</li>
+        </ul>
+
+        <div class="feature-ctas">
+          <span class="feature-price">From<b>$449</b></span>
+          <a href="#cta" class="btn btn-primary">
+            Reserve a pair
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="#" class="btn btn-ghost">Try virtually</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 3: Smart Assistant
+══════════════════════════════════════════════ -->
+<section id="assistants" class="feature">
+  <div class="wrap">
+    <div class="feature-inner">
+      <div class="feature-image reveal">
+        <img src="brand_assets/generated/assistant-hero.png" alt="Tester Smart Assistant">
+      </div>
+      <div class="feature-body reveal reveal-1">
+        <div class="feature-eyebrow"><span class="d"></span>§ 04 · Voice</div>
+        <h3 class="feature-h">Smart <span class="serif">Assistant.</span></h3>
+        <p class="feature-p">Six-mic far-field array, on-device speech recognition, and <strong>nothing goes to the cloud unless you say so</strong>. A 270° woofer with two tweeters fills a room without shouting.</p>
+
+        <ul class="feature-specs">
+          <li><span>Speech</span>On-device · 0 cloud</li>
+          <li><span>Mics</span>6-array · 4m pickup</li>
+          <li><span>Audio</span>270° woofer · 2× tweeter</li>
+          <li><span>Hub</span>Matter · Thread · Zigbee</li>
+        </ul>
+
+        <div class="feature-ctas">
+          <span class="feature-price">From<b>$249</b></span>
+          <a href="#cta" class="btn btn-primary">
+            Add to cart
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="#" class="btn btn-ghost">Hear it</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 4: Smart Home + Audio (reversed)
+══════════════════════════════════════════════ -->
+<section id="home" class="feature reversed">
+  <div class="wrap">
+    <div class="feature-inner">
+      <div class="feature-image reveal">
+        <img src="brand_assets/generated/home-sensors.png" alt="Tester Smart Home sensors">
+      </div>
+      <div class="feature-body reveal reveal-1">
+        <div class="feature-eyebrow mint"><span class="d"></span>§ 05 · Home</div>
+        <h3 class="feature-h">Home <span class="serif">sensors &amp; hub.</span></h3>
+        <p class="feature-p">A matchbox-sized Matter hub and six sensor types — motion, air quality, water leak, door contact, temp, button. <strong>Two-year battery</strong>. Works even if your internet doesn't.</p>
+
+        <ul class="feature-specs">
+          <li><span>Protocol</span>Matter · Thread border router</li>
+          <li><span>Battery</span>2-year CR2032</li>
+          <li><span>Latency</span>Local · sub-50ms</li>
+          <li><span>Range</span>25m · mesh-extending</li>
+        </ul>
+
+        <div class="feature-ctas">
+          <span class="feature-price">Hub<b>$79</b></span>
+          <a href="#cta" class="btn btn-primary">
+            Build a kit
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="#" class="btn btn-ghost">Protocol specs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURE 5: Audio (Earbuds)
+══════════════════════════════════════════════ -->
+<section id="audio" class="feature">
+  <div class="wrap">
+    <div class="feature-inner">
+      <div class="feature-image reveal">
+        <img src="brand_assets/generated/earbuds-case.png" alt="Tester Wireless Earbuds">
+      </div>
+      <div class="feature-body reveal reveal-1">
+        <div class="feature-eyebrow gold"><span class="d"></span>§ 06 · Audio</div>
+        <h3 class="feature-h">Wireless <span class="serif">earbuds.</span></h3>
+        <p class="feature-p">Custom 11mm beryllium drivers, six-mic ANC, and a <strong>12-hour single-charge life</strong> (36 with case). Lossless over Bluetooth LE Audio. Replaceable batteries. No proprietary dongles.</p>
+
+        <ul class="feature-specs">
+          <li><span>Driver</span>11mm beryllium</li>
+          <li><span>ANC</span>6-mic · -40dB</li>
+          <li><span>Battery</span>12h · 36h w/case</li>
+          <li><span>Codec</span>LE Audio · LC3 lossless</li>
+        </ul>
+
+        <div class="feature-ctas">
+          <span class="feature-price">From<b>$179</b></span>
+          <a href="#cta" class="btn btn-gold">
+            Add to cart
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="#" class="btn btn-ghost">Listen</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CONFIGURATOR  ·  Build your Watch Pro
+══════════════════════════════════════════════ -->
+<section id="configure" class="configure">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="eyebrow">§ 07 — Configure</div>
+        <h2 class="sec-h">Make it <span class="serif">yours.</span></h2>
+      </div>
+      <p class="sec-desc">Three case finishes, six bands, optional engraving. Pricing and stock update in real time — because surprises at checkout are rude.</p>
+    </div>
+
+    <div class="configure-inner">
+      <div class="configure-preview reveal" id="cfgPreview" data-case="gold">
+        <span class="configure-preview-chip">
+          <span class="swatch"></span>
+          <span id="cfgChipLabel">Gold · Forest Leaf</span>
+        </span>
+        <div class="configure-preview-img">
+          <img src="brand_assets/watch-frames/frame-18.webp" alt="Smart Watch Pro live preview" id="cfgHeroImg">
+        </div>
+        <div class="configure-preview-sum">
+          <div>
+            <div class="label">Your build</div>
+            <div class="value" id="cfgSummary">Watch Pro · 44mm · Gold · Forest</div>
+          </div>
+          <div class="price"><em>From</em>$<span id="cfgPrice">579</span></div>
+        </div>
+      </div>
+
+      <div class="configure-body reveal reveal-1">
+        <div class="opt-group">
+          <div class="opt-h">
+            <span class="lbl">01 · Case size</span>
+            <span class="val" data-val="size">44mm</span>
+          </div>
+          <div class="opt-chips" data-opt="size">
+            <button type="button" class="chip" data-value="40mm" data-price="0" aria-pressed="false">40 mm</button>
+            <button type="button" class="chip" data-value="44mm" data-price="0" aria-pressed="true">44 mm</button>
+            <button type="button" class="chip" data-value="48mm" data-price="30" aria-pressed="false">48 mm <small style="opacity:.6;">+$30</small></button>
+          </div>
+        </div>
+
+        <div class="opt-group">
+          <div class="opt-h">
+            <span class="lbl">02 · Case finish</span>
+            <span class="val" data-val="case">Gold Titanium</span>
+          </div>
+          <div class="opt-chips" data-opt="case">
+            <button type="button" class="chip" data-value="gold" data-label="Gold Titanium" data-price="80" aria-pressed="true"><span class="dot c-gold"></span>Gold Ti <small style="opacity:.6;">+$80</small></button>
+            <button type="button" class="chip" data-value="silver" data-label="Silver Titanium" data-price="0" aria-pressed="false"><span class="dot c-silver"></span>Silver Ti</button>
+            <button type="button" class="chip" data-value="graphite" data-label="Graphite Ti" data-price="40" aria-pressed="false"><span class="dot c-graphite"></span>Graphite Ti <small style="opacity:.6;">+$40</small></button>
+          </div>
+        </div>
+
+        <div class="opt-group">
+          <div class="opt-h">
+            <span class="lbl">03 · Band</span>
+            <span class="val" data-val="band">Forest Leaf</span>
+          </div>
+          <div class="opt-chips" data-opt="band">
+            <button type="button" class="chip" data-value="Forest Leaf" data-price="0" aria-pressed="true"><span class="dot c-mint"></span>Forest Leaf</button>
+            <button type="button" class="chip" data-value="Saddle Tan" data-price="0" aria-pressed="false"><span class="dot c-tan"></span>Saddle Tan</button>
+            <button type="button" class="chip" data-value="Noir Sport" data-price="0" aria-pressed="false"><span class="dot c-noir"></span>Noir Sport</button>
+            <button type="button" class="chip" data-value="Milanese" data-price="60" aria-pressed="false"><span class="dot c-silver"></span>Milanese <small style="opacity:.6;">+$60</small></button>
+          </div>
+        </div>
+
+        <div class="configure-foot">
+          <label class="configure-engrave">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+            <input type="text" placeholder="Engraving — 18 chars max" maxlength="18" id="cfgEngrave">
+          </label>
+          <a href="#cta" class="btn btn-gold">
+            Reserve this build
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     COMPARISON TABLE
+══════════════════════════════════════════════ -->
+<section id="compare" class="compare">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="eyebrow">§ 08 — Compare</div>
+        <h2 class="sec-h">Three watches. <span class="serif">One honest table.</span></h2>
+      </div>
+      <p class="sec-desc">No feature-gating theatre. Every watch runs the same OS, gets the same software updates for five years, and talks to every Tester device.</p>
+    </div>
+
+    <div class="compare-tbl-wrap reveal">
+      <table class="compare-tbl">
+        <thead>
+          <tr>
+            <th scope="col">Spec</th>
+            <th scope="col">
+              <div class="compare-model">
+                <span class="tag">§ Entry</span>
+                <span class="name">Watch <span class="serif">Lite</span></span>
+                <span class="price">from $299</span>
+              </div>
+            </th>
+            <th scope="col" class="featured">
+              <div class="compare-model">
+                <span class="tag">§ Flagship</span>
+                <span class="name">Watch <span class="serif">Pro</span></span>
+                <span class="price">from $499</span>
+              </div>
+            </th>
+            <th scope="col">
+              <div class="compare-model">
+                <span class="tag">§ Active</span>
+                <span class="name">Watch <span class="serif">Active</span></span>
+                <span class="price">from $379</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Case</th><td>Aluminium · 40mm</td><td class="featured">Grade 5 Titanium · 40 / 44 / 48mm</td><td>Brushed steel · 42mm</td></tr>
+          <tr><th scope="row">Display</th><td>1.5" AMOLED · 1500 nit</td><td class="featured">1.78" AMOLED · 2500 nit</td><td>1.65" AMOLED · 2000 nit</td></tr>
+          <tr><th scope="row">Battery (active)</th><td>24 h</td><td class="featured">48 h</td><td>36 h</td></tr>
+          <tr><th scope="row">Water rating</th><td>3 ATM · IPX7</td><td class="featured">5 ATM · IP6X</td><td>5 ATM · IPX8</td></tr>
+          <tr><th scope="row">ECG + SpO₂</th><td><span class="n">—</span></td><td class="featured"><span class="y">✓ Medical-grade</span></td><td><span class="y">✓ SpO₂ only</span></td></tr>
+          <tr><th scope="row">Dual-band GPS</th><td><span class="n">—</span></td><td class="featured"><span class="y">✓</span></td><td><span class="y">✓</span></td></tr>
+          <tr><th scope="row">Sapphire crystal</th><td><span class="n">Gorilla Glass</span></td><td class="featured"><span class="y">✓</span></td><td><span class="n">Gorilla Glass</span></td></tr>
+          <tr><th scope="row">Repair program</th><td><span class="y">✓ 5-yr parts</span></td><td class="featured"><span class="y">✓ 5-yr parts</span></td><td><span class="y">✓ 5-yr parts</span></td></tr>
+          <tr><th scope="row">On-device voice</th><td><span class="y">✓</span></td><td class="featured"><span class="y">✓ + dictation</span></td><td><span class="y">✓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="compare-foot">
+      <a href="product.html" class="btn btn-gold">
+        Read the full spec sheet
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#configure" class="btn btn-ghost">Configure a Pro</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     REVIEWS
+══════════════════════════════════════════════ -->
+<section id="reviews" class="reviews">
+  <div class="wrap">
+    <div class="reviews-head reveal">
+      <div>
+        <div class="eyebrow">§ 09 — Owners</div>
+        <h2 class="sec-h" style="margin-top:12px;">Quiet praise from <span class="serif">loud customers.</span></h2>
+      </div>
+      <div class="reviews-score">
+        <div class="val">4<em>.8</em><span style="font-size:.5em;color:var(--silver);">/5</span></div>
+        <div class="stars">★ ★ ★ ★ ★</div>
+        <div class="count">from 3,412 verified owners</div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <article class="review reveal reveal-1">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ ★</div>
+          <div class="review-verified">Verified · Watch Pro</div>
+        </div>
+        <p class="review-quote">Felt expensive the moment I opened the box. Still does, ten months in.</p>
+        <p class="review-body">I dive with it weekly and it hasn't flinched. The 48-hour battery is the only spec on this watch that undersells itself — I regularly push 60 without power-save.</p>
+        <div class="review-foot">
+          <div class="review-avatar">MJ</div>
+          <div>
+            <div class="review-name">Marcus J.</div>
+            <div class="review-meta">Bristol, UK · Owner for 10 mo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-2">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ ★</div>
+          <div class="review-verified">Verified · Smart Glasses</div>
+        </div>
+        <p class="review-quote">The HUD actually disappears when I'm not using it. Most don't.</p>
+        <p class="review-body">I split time between a woodshop and a studio. These survived both. The prescription inserts arrived in four days and the fit is genuinely neutral — nobody's asked what's on my face.</p>
+        <div class="review-foot">
+          <div class="review-avatar">AK</div>
+          <div>
+            <div class="review-name">Aiko K.</div>
+            <div class="review-meta">Kyoto, JP · Owner for 6 mo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-3">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ <span style="color:var(--ink-dim);">★</span></div>
+          <div class="review-verified">Verified · Home Hub</div>
+        </div>
+        <p class="review-quote">First smart device my router hasn't had opinions about.</p>
+        <p class="review-body">Set up the Matter hub, added 14 sensors, watched exactly zero packets leave the subnet. Docked a star because the included stand wobbles on granite — easy fix with the 3D-printable spare they ship.</p>
+        <div class="review-foot">
+          <div class="review-avatar">DR</div>
+          <div>
+            <div class="review-name">Diego R.</div>
+            <div class="review-meta">Mexico City · Owner for 3 mo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-1">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ ★</div>
+          <div class="review-verified">Verified · Earbuds</div>
+        </div>
+        <p class="review-quote">Replaceable batteries. In 2026. I nearly cried.</p>
+        <p class="review-body">I've burned through three pairs of premium earbuds because the batteries died and the cases were glued shut. These pop open with a coin. The LC3 lossless sounds better than the pair they replaced — which cost more.</p>
+        <div class="review-foot">
+          <div class="review-avatar">SP</div>
+          <div>
+            <div class="review-name">Sophie P.</div>
+            <div class="review-meta">Berlin, DE · Owner for 4 mo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-2">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ ★</div>
+          <div class="review-verified">Verified · Assistant</div>
+        </div>
+        <p class="review-quote">Finally, a speaker I can yell at in peace.</p>
+        <p class="review-body">I flipped the cloud switch off during setup and the speech recognition works just as well, maybe better. The sound is room-filling without being showy — the 270° woofer lives up to the claim.</p>
+        <div class="review-foot">
+          <div class="review-avatar">NT</div>
+          <div>
+            <div class="review-name">Nora T.</div>
+            <div class="review-meta">Melbourne, AU · Owner for 8 mo</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="review reveal reveal-3">
+        <div class="review-top">
+          <div class="review-stars">★ ★ ★ ★ ★</div>
+          <div class="review-verified">Verified · Starter kit</div>
+        </div>
+        <p class="review-quote">The kit talks to itself like it's one device. Because it kind of is.</p>
+        <p class="review-body">Watch → hub → earbuds all use the same radio and pair via QR once. Battery life on the ensemble reads out on the watch. I use the Apple kit at work; this one's better on every axis I care about.</p>
+        <div class="review-foot">
+          <div class="review-avatar">HC</div>
+          <div>
+            <div class="review-name">Henri C.</div>
+            <div class="review-meta">Montréal, CA · Owner for 7 mo</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     AWARDS / PRESS QUOTES
+══════════════════════════════════════════════ -->
+<section id="awards" class="awards">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-head-left">
+        <div class="eyebrow">§ 10 — Press</div>
+        <h2 class="sec-h">The critics <span class="serif">took notes.</span></h2>
+      </div>
+      <p class="sec-desc">Independent reviews from outlets that test tech for a living — and a few awards we're pretending not to be too proud of.</p>
+    </div>
+
+    <div class="awards-grid">
+      <article class="award reveal reveal-1">
+        <div class="award-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Editor's Choice · 2026
+        </div>
+        <div class="award-head">
+          <div class="award-outlet">The Verge</div>
+          <div class="award-date">03 / 2026</div>
+        </div>
+        <p class="award-quote">"The first smartwatch this decade that feels like a <em>watch</em> first and a computer second. Battery life alone buys it the win."</p>
+        <div class="award-author">Nilay Patel · Review of Watch Pro</div>
+      </article>
+
+      <article class="award reveal reveal-2">
+        <div class="award-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          9.4 / 10 · Recommended
+        </div>
+        <div class="award-head">
+          <div class="award-outlet">Wirecutter</div>
+          <div class="award-date">02 / 2026</div>
+        </div>
+        <p class="award-quote">"We tore down the whole lineup. Every one of them is designed to be opened — a rarity in this category, and the reason we'd buy them with our own money."</p>
+        <div class="award-author">Consumer Electronics Desk · Annual Teardown</div>
+      </article>
+
+      <article class="award reveal reveal-3">
+        <div class="award-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Gadget of the Year
+        </div>
+        <div class="award-head">
+          <div class="award-outlet">Wired</div>
+          <div class="award-date">12 / 2025</div>
+        </div>
+        <p class="award-quote">"Tester is quietly making the case that privacy-first, repairable hardware isn't a compromise. It's the upgrade."</p>
+        <div class="award-author">Lauren Goode · Year-end Awards</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FAQ  ·  Support & answers
+══════════════════════════════════════════════ -->
+<section id="faq" class="faq">
+  <div class="wrap">
+    <div class="faq-inner">
+      <aside class="faq-aside reveal">
+        <div class="eyebrow">§ 11 — Answered</div>
+        <h2>Questions, <span class="serif">before you ask them.</span></h2>
+        <p>The top eight we get in support each week. Can't find yours? We read every email within a business day — usually faster.</p>
+        <a href="mailto:hello@tester.io" class="faq-contact">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          hello@tester.io
+        </a>
+      </aside>
+
+      <div class="faq-list reveal reveal-1">
+        <details class="faq-item" open>
+          <summary>
+            Does Tester ship outside the US?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Yes — to 38 countries, with duties pre-paid at checkout. Free shipping over $199 in the US, UK, EU, Canada, and Australia. Everywhere else, we use DHL Express with tracked delivery inside <strong>four business days</strong>.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What happens if something breaks?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Our repair program covers all parts for <strong>five years</strong> — batteries, displays, sensors, straps, bezels, the lot. Ship it to our Brooklyn or Rotterdam lab with the prepaid label in the box; most repairs return inside ten days. Small parts ship direct with instructions if you'd rather do it yourself.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Is there a monthly subscription?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">No. Every feature on the spec sheet is included for the life of the device. <strong>Five years of software updates</strong>, unlimited cloud sync (if you opt in), voice dictation, and advanced health metrics — all paid for once, on the box.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Can I really run my own firmware?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Yes. The bootloader unlocks with a single command via USB-C. We maintain an open SDK on GitHub with a full hardware abstraction layer. Running custom firmware doesn't void your warranty on <em>hardware</em> — we just can't support your builds if they misbehave.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Which Matter and Thread devices does the hub support?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Anything with a Matter 1.3+ or Thread 1.3+ certification — we've tested 140+ devices across Aqara, Eve, Nanoleaf, Philips Hue, Yale, Shelly, and Ikea. Our hub also acts as a Thread border router, so it'll extend the mesh for any certified accessory on your network.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Do you track me with any of this?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">No telemetry leaves your network by default. You can opt-in to anonymous crash reports if you want to help — it's a single toggle, disabled on first boot. Health and location data is <strong>encrypted at rest on the device</strong> and never transmitted unless you explicitly sync it to a service you control.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            How does the 30-day trial work?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Buy anything, use it for up to 30 days, ship it back for a full refund. We pay return shipping. No restocking fee, no "unless the seal is broken" fine print — you can't evaluate a watch through a window.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Will my older Tester devices keep working?
+            <span class="q-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </summary>
+          <div class="a">Every device we've ever shipped still pairs with the current firmware. Our first-gen watch from 2022 got the same Matter update the Pro did last month. We maintain backwards compatibility for a minimum of <strong>seven years post-launch</strong>.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     STATS BAND
+══════════════════════════════════════════════ -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-v">1<em>.2</em><span class="unit">M</span></div>
+      <div class="stat-l">Devices shipped</div>
+    </div>
+    <div class="stat">
+      <div class="stat-v">4<em>.8</em><span class="unit">/5</span></div>
+      <div class="stat-l">Customer rating</div>
+    </div>
+    <div class="stat">
+      <div class="stat-v">0<span class="unit"> data</span></div>
+      <div class="stat-l">Sold to third parties</div>
+    </div>
+    <div class="stat">
+      <div class="stat-v">5<span class="unit"> yr</span></div>
+      <div class="stat-l">Repair guarantee</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CTA
+══════════════════════════════════════════════ -->
+<section id="cta" class="cta-wrap">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div class="cta-inner">
+        <div class="cta-eyebrow">
+          <span>✦</span>Free shipping over $199 · 30-day returns
+        </div>
+        <h2 class="cta-h">
+          Bring it all <span class="serif">home.</span>
+        </h2>
+        <p class="cta-p">
+          Build a starter kit — a watch, a hub, a pair of earbuds — and get 10% off. Or reserve a single device and we'll let you know when it ships.
+        </p>
+
+        <div class="cta-ctas">
+          <a href="#categories" class="btn btn-primary btn-xl">
+            Shop all devices
+            <span class="arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+          <a href="product.html" class="btn btn-ghost btn-xl">
+            Start with the watch
+          </a>
+        </div>
+
+        <form class="cta-form" onsubmit="event.preventDefault();">
+          <input type="email" class="cta-input" placeholder="Drop your email for the Spring lineup" required>
+          <button type="submit" class="btn btn-primary">
+            Subscribe
+          </button>
+        </form>
+
+        <p class="cta-note">
+          No spam <span class="sep">·</span> unsubscribe any time <span class="sep">·</span> we don't sell your data
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-row">
+          <div class="mark">T</div>
+          Tester <span style="color:#4B5058;font-weight:300;">/</span> <span class="sub">Tech</span>
+        </div>
+        <p class="footer-desc">
+          Open firmware. Repair-first design. No telemetry leaving your network. The consumer electronics you'd build — if you had a factory.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="soc" aria-label="Twitter">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="soc" aria-label="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="soc" aria-label="YouTube">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+          </a>
+          <a href="#" class="soc" aria-label="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-h">Shop</div>
+        <ul class="footer-links">
+          <li><a href="#watches">Smart Watches</a></li>
+          <li><a href="#glasses">Smart Glasses</a></li>
+          <li><a href="#assistants">Assistants</a></li>
+          <li><a href="#home">Home &amp; Hub</a></li>
+          <li><a href="#audio">Audio &amp; Earbuds</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-h">Support</div>
+        <ul class="footer-links">
+          <li><a href="#">Order status</a></li>
+          <li><a href="#">Shipping &amp; returns</a></li>
+          <li><a href="#">Repair program</a></li>
+          <li><a href="#">Warranty</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-h">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html">Main site</a></li>
+          <li><a href="anything.html">Forge lab</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bot">
+      <div class="footer-copy">© 2026 Tester Tech · Made in small batches</div>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Accessibility</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Inline SVG fallback for any <img> that fails both src + onerror-fallback.
+  // Generates a themed placeholder with the alt text, so layout stays intact
+  // even when external image CDNs are unreachable.
+  window.__imgFallback = (img) => {
+    const label = (img.alt || 'Device').toUpperCase().slice(0, 32);
+    // Higher-contrast placeholder: radial spotlight + gold-accented device glyph
+    // + legible mono label. Renders crisply at any size.
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' preserveAspectRatio='xMidYMid slice'>
+      <defs>
+        <radialGradient id='bg' cx='50%' cy='40%' r='70%'>
+          <stop offset='0%' stop-color='%232B3038'/>
+          <stop offset='60%' stop-color='%23141820'/>
+          <stop offset='100%' stop-color='%23080A0C'/>
+        </radialGradient>
+        <radialGradient id='glow' cx='50%' cy='42%' r='35%'>
+          <stop offset='0%' stop-color='%23D4A852' stop-opacity='0.35'/>
+          <stop offset='100%' stop-color='%23D4A852' stop-opacity='0'/>
+        </radialGradient>
+        <pattern id='dots' width='28' height='28' patternUnits='userSpaceOnUse'>
+          <circle cx='14' cy='14' r='1' fill='%23C9D1DD' opacity='0.18'/>
+        </pattern>
+      </defs>
+      <rect width='800' height='600' fill='url(%23bg)'/>
+      <rect width='800' height='600' fill='url(%23dots)'/>
+      <circle cx='400' cy='250' r='180' fill='url(%23glow)'/>
+      <circle cx='400' cy='250' r='88' fill='none' stroke='%23D4A852' stroke-width='2' opacity='0.9'/>
+      <circle cx='400' cy='250' r='62' fill='%2314161A' stroke='%23C9D1DD' stroke-width='1' opacity='0.85'/>
+      <circle cx='400' cy='250' r='32' fill='none' stroke='%23D4A852' stroke-width='1.4' opacity='0.7'/>
+      <circle cx='400' cy='250' r='5' fill='%23D4A852'/>
+      <rect x='388' y='462' width='24' height='2' fill='%23D4A852' opacity='0.8'/>
+      <text x='400' y='496' font-family='DM Sans, sans-serif' font-size='32' font-weight='700' fill='%23F5F7FA' text-anchor='middle' letter-spacing='-0.5'>${label}</text>
+      <text x='400' y='528' font-family='JetBrains Mono, monospace' font-size='11' fill='%238A909A' text-anchor='middle' letter-spacing='3'>PRODUCT PLACEHOLDER</text>
+    </svg>`;
+    img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    img.onerror = null;
+  };
+
+  // Attach global fallback: handles error events + a 6s timeout for
+  // requests that hang (slow networks, blocked CDNs).
+  document.querySelectorAll('img').forEach(img => {
+    if (img.complete && img.naturalWidth > 0) return;            // already loaded
+    if (img.complete && img.naturalWidth === 0) {                // already errored
+      window.__imgFallback(img);
+      return;
+    }
+    let settled = false;
+    const settle = (fn) => () => { if (!settled) { settled = true; fn(); } };
+    img.addEventListener('load',  settle(() => {}),                  { once: true });
+    img.addEventListener('error', settle(() => window.__imgFallback(img)), { once: true });
+    setTimeout(settle(() => {
+      if (img.naturalWidth === 0) window.__imgFallback(img);
+    }), 6000);
+  });
+
+  // Scroll-reveal
+  (() => {
+    if (typeof IntersectionObserver === 'undefined') {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  })();
+
+  // Nav shrink on scroll + scroll progress bar
+  (() => {
+    const nav = document.querySelector('.nav');
+    const bar = document.getElementById('scrollProgress');
+    let ticking = false;
+    const update = () => {
+      const y = window.scrollY;
+      nav.style.paddingTop = nav.style.paddingBottom = y > 20 ? '10px' : '14px';
+      if (bar) {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = h > 0 ? (y / h) * 100 : 0;
+        bar.style.width = pct + '%';
+      }
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  })();
+
+  // ── Configurator ──────────────────────────────
+  (() => {
+    const preview  = document.getElementById('cfgPreview');
+    if (!preview) return;
+    const BASE = 499;
+
+    const state = {
+      size:  { value: '44mm',           label: '44mm',            price: 0 },
+      case:  { value: 'gold',           label: 'Gold Titanium',   price: 80 },
+      band:  { value: 'Forest Leaf',    label: 'Forest Leaf',     price: 0 },
+    };
+
+    const priceEl   = document.getElementById('cfgPrice');
+    const sumEl     = document.getElementById('cfgSummary');
+    const chipLabel = document.getElementById('cfgChipLabel');
+
+    const render = () => {
+      preview.dataset.case = state.case.value;
+      const total = BASE + state.size.price + state.case.price + state.band.price;
+      priceEl.textContent = total;
+      const caseShort = state.case.value.charAt(0).toUpperCase() + state.case.value.slice(1);
+      sumEl.textContent = `Watch Pro · ${state.size.value} · ${caseShort} · ${state.band.value.split(' ')[0]}`;
+      chipLabel.textContent = `${caseShort} · ${state.band.value}`;
+      document.querySelectorAll('[data-val]').forEach(el => {
+        const k = el.dataset.val;
+        if (state[k]) el.textContent = state[k].label || state[k].value;
+      });
+    };
+
+    document.querySelectorAll('.opt-chips').forEach(group => {
+      const key = group.dataset.opt;
+      group.addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        group.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
+        chip.setAttribute('aria-pressed', 'true');
+        state[key] = {
+          value: chip.dataset.value,
+          label: chip.dataset.label || chip.dataset.value,
+          price: parseInt(chip.dataset.price || '0', 10),
+        };
+        render();
+      });
+    });
+
+    render();
+  })();
+
+  // ── FAQ: close siblings (one-open behaviour) ──
+  (() => {
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      item.addEventListener('toggle', () => {
+        if (item.open) {
+          items.forEach(other => { if (other !== item) other.open = false; });
+        }
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
