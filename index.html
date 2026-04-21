@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tester.io — Ship Software With Absolute Confidence</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+      color: #0D0C22;
+      background: #fff;
+      overflow-x: hidden;
+      font-size: 16px;
+      line-height: 28px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    ::selection { background: rgba(198,165,89,0.2); color: #0D0C22; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #FDFBF4; }
+    ::-webkit-scrollbar-thumb { background: #D9C07A; border-radius: 4px; }
+
+    /* ── Animations ─────────────────────────────── */
+    @keyframes blobFloat {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(18px,-18px) scale(1.04); }
+      66%      { transform: translate(-14px,10px) scale(0.96); }
+    }
+    @keyframes cardFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(32px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeRight {
+      from { opacity:0; transform:translateX(48px); }
+      to   { opacity:1; transform:translateX(0); }
+    }
+    @keyframes runningPulse {
+      0%,100% { opacity:1; }
+      50%      { opacity:0.45; }
+    }
+    @keyframes progressFill {
+      from { width: 0%; }
+      to   { width: 72%; }
+    }
+
+    .blob-a { animation: blobFloat 9s ease-in-out infinite; }
+    .blob-b { animation: blobFloat 11s ease-in-out infinite 2s; }
+    .card-f1 { animation: cardFloat 4.2s ease-in-out infinite; }
+    .card-f2 { animation: cardFloat 4.2s ease-in-out infinite 1.6s; }
+    .running-dot { animation: runningPulse 1.4s ease-in-out infinite; }
+
+    .hero-left  { animation: fadeUp    .85s cubic-bezier(.22,1,.36,1) .1s both; }
+    .hero-right { animation: fadeRight 1.0s cubic-bezier(.22,1,.36,1) .3s both; }
+
+    /* ── Gradient text ───────────────────────────── */
+    .grad-text {
+      background: linear-gradient(135deg, #C6A559 0%, #E68979 60%, #D4941E 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Cycling animated headline word ─────────── */
+    .cycle-wrap {
+      position: relative;
+      display: inline-block;
+      vertical-align: baseline;
+      line-height: inherit;
+    }
+    .cycle-ghost {
+      visibility: hidden;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .cycle-word {
+      position: absolute;
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      opacity: 0;
+      will-change: opacity, transform, filter;
+      animation: cycleWord 9s cubic-bezier(.22,1,.36,1) infinite;
+    }
+    .cycle-word.c1 {
+      background-image: linear-gradient(135deg,#C6A559 0%,#E68979 60%,#D4941E 100%);
+      animation-delay: 0s;
+    }
+    .cycle-word.c2 {
+      background-image: linear-gradient(135deg,#D4941E 0%,#C6A559 50%,#E68979 100%);
+      animation-delay: 3s;
+    }
+    .cycle-word.c3 {
+      background-image: linear-gradient(135deg,#E68979 0%,#D9B06A 50%,#C6A559 100%);
+      animation-delay: 6s;
+    }
+    @keyframes cycleWord {
+      0%   { opacity: 0; transform: translateY(10px); filter: blur(6px); }
+      4%   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+      29%  { opacity: 1; transform: translateY(0);    filter: blur(0); }
+      33%  { opacity: 0; transform: translateY(-10px); filter: blur(6px); }
+      100% { opacity: 0; transform: translateY(-10px); filter: blur(6px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cycle-word { animation: none; }
+      .cycle-word.c1 { opacity: 1; }
+    }
+
+    /* ── Nav ─────────────────────────────────────── */
+    .site-nav {
+      position: sticky; top:0; z-index:100;
+      background: rgba(255,255,255,.93);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(198,165,89,.18);
+    }
+    .nav-inner {
+      max-width:1160px; margin:0 auto; padding:0 40px;
+      height:72px; display:flex; align-items:center; justify-content:space-between;
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo-name { font-size:20px; font-weight:800; color:#0D0C22; letter-spacing:-.03em; }
+    .nav-links { display:flex; align-items:center; gap:36px; }
+    .nav-link {
+      position:relative; font-size:15px; font-weight:500; color:#44425A;
+      text-decoration:none; transition: color .2s ease;
+    }
+    .nav-link::after {
+      content:''; position:absolute; bottom:-2px; left:0;
+      width:0; height:2px;
+      background: linear-gradient(90deg,#C6A559,#E68979);
+      transition: width .25s cubic-bezier(.22,1,.36,1);
+    }
+    .nav-link:hover { color:#C6A559; }
+    .nav-link:hover::after { width:100%; }
+    .nav-actions { display:flex; align-items:center; gap:14px; }
+    .nav-signin { font-size:15px; font-weight:600; color:#44425A; text-decoration:none; transition: color .2s; }
+    .nav-signin:hover { color:#C6A559; }
+
+    /* ── Buttons ─────────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      border:none; cursor:pointer; font-family:"Montserrat",inherit; font-weight:600;
+      letter-spacing:-.01em; border-radius:12px;
+      transition: transform .15s ease, box-shadow .25s ease, opacity .2s ease;
+      outline:none;
+    }
+    .btn:active { transform:translateY(1px) !important; }
+
+    .btn-gold {
+      background: linear-gradient(135deg,#C6A559,#E68979);
+      color:#fff;
+      padding:13px 28px; font-size:15px;
+      box-shadow: 0 4px 16px rgba(198,165,89,.35);
+    }
+    .btn-gold:hover { opacity:.9; transform:translateY(-2px); box-shadow: 0 8px 28px rgba(198,165,89,.45); }
+    .btn-gold:focus-visible { outline:2px solid #C6A559; outline-offset:3px; }
+
+    .btn-outline {
+      background:transparent; color:#0D0C22;
+      padding:13px 28px; font-size:15px;
+      border:2px solid #E8DDB8;
+    }
+    .btn-outline:hover { border-color:#C6A559; color:#C6A559; transform:translateY(-2px); }
+    .btn-outline:focus-visible { outline:2px solid #C6A559; outline-offset:3px; }
+
+    .btn-dark {
+      background:#0D0C22; color:#fff;
+      padding:13px 28px; font-size:15px;
+      box-shadow: 0 4px 12px rgba(13,12,34,.22);
+    }
+    .btn-dark:hover { background:#3D3B5A; transform:translateY(-2px); box-shadow: 0 8px 24px rgba(13,12,34,.28); }
+
+    /* ── Hero ────────────────────────────────────── */
+    .hero { position:relative; overflow:hidden; padding:88px 0 60px; min-height:calc(100vh - 72px); }
+    .hero-inner {
+      max-width:1160px; margin:0 auto; padding:0 40px;
+      display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+    }
+
+    .pill-badge {
+      display:inline-flex; align-items:center; gap:7px;
+      background:#FEF9EC; color:#C6A559;
+      padding:7px 15px; border-radius:100px;
+      font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      border:1px solid #F0DFA0; margin-bottom:28px;
+    }
+    .pill-dot { width:6px; height:6px; background:#C6A559; border-radius:50%; }
+
+    .hero-h1 {
+      font-size:clamp(36px,3.9vw,54px); font-weight:800;
+      line-height:1.1; letter-spacing:-.035em;
+      color:#0D0C22; margin-bottom:24px;
+    }
+    .hero-sub {
+      font-size:17px; line-height:1.75; color:#6B6880;
+      max-width:480px; margin-bottom:40px;
+    }
+    .hero-ctas { display:flex; align-items:center; gap:16px; margin-bottom:48px; }
+
+    .hero-trust { display:flex; align-items:center; gap:24px; }
+    .avatar-stack { display:flex; align-items:center; }
+    .av {
+      width:36px; height:36px; border-radius:50%; border:3px solid white;
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-size:11px; font-weight:700;
+    }
+    .av + .av { margin-left:-10px; }
+    .trust-stars { color:#F59E0B; font-size:13px; letter-spacing:1px; }
+    .trust-text { font-size:13px; color:#6B6880; font-weight:500; }
+    .trust-text strong { color:#0D0C22; }
+
+    /* ── Hero visual ─────────────────────────────── */
+    .hero-visual { position:relative; height:580px; }
+
+    .hero-bg-blob {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-42%,-50%);
+      width:440px; height:440px;
+      background:radial-gradient(circle,rgba(198,165,89,.14) 0%,rgba(230,137,121,.08) 50%,transparent 70%);
+      border-radius:50%; pointer-events:none;
+    }
+
+    /* Person card placeholder */
+    .hero-person {
+      position:absolute; right:16px; top:36px;
+      width:236px; height:340px;
+      background:linear-gradient(158deg,#FEF9EC 0%,#FDF4DC 100%);
+      border-radius:24px; overflow:hidden;
+      box-shadow: 0 20px 60px rgba(198,165,89,.18);
+    }
+    .hero-person img { width:100%; height:100%; object-fit:cover; }
+
+    /* Test Runner Card (like bank card) */
+    .test-card {
+      position:absolute; left:0; top:72px;
+      width:296px;
+      background:linear-gradient(140deg,#0D0C22 0%,#1E1C38 55%,#141430 100%);
+      border-radius:22px; padding:22px 24px;
+      box-shadow: 0 24px 60px rgba(13,12,34,.38), 0 8px 24px rgba(198,165,89,.14);
+      overflow:hidden;
+    }
+    .test-card::before {
+      content:''; position:absolute; top:-50%; right:-50%; width:100%; height:100%;
+      background:radial-gradient(circle,rgba(198,165,89,.18) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    .test-card-inner { position:relative; z-index:1; }
+    .tc-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .tc-brand { display:flex; align-items:center; gap:8px; }
+    .tc-brand-name { color:rgba(255,255,255,.85); font-size:13px; font-weight:700; letter-spacing:.02em; }
+    .tc-live {
+      background:rgba(34,197,94,.15); color:#4ADE80; border:1px solid rgba(34,197,94,.3);
+      padding:2px 8px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:.06em;
+    }
+    .tc-count { color:rgba(255,255,255,.35); font-size:11px; font-weight:600; }
+    .tc-divider { height:1px; background:rgba(255,255,255,.08); margin-bottom:14px; }
+
+    .tc-test { display:flex; align-items:center; gap:10px; padding:7px 0; }
+    .tc-test + .tc-test { border-top:1px solid rgba(255,255,255,.05); }
+    .tc-test-name { flex:1; color:rgba(255,255,255,.78); font-size:12px; font-weight:500; letter-spacing:.01em; }
+    .tc-badge {
+      padding:3px 8px; border-radius:100px; font-size:10px; font-weight:700; letter-spacing:.05em;
+      flex-shrink:0;
+    }
+    .tc-passed  { background:rgba(34,197,94,.15);  color:#4ADE80; border:1px solid rgba(34,197,94,.25); }
+    .tc-running { background:rgba(198,165,89,.18); color:#E8C57A; border:1px solid rgba(198,165,89,.3); }
+    .tc-queued  { background:rgba(255,255,255,.08); color:rgba(255,255,255,.4); border:1px solid rgba(255,255,255,.1); }
+
+    .tc-footer { margin-top:14px; border-top:1px solid rgba(255,255,255,.08); padding-top:12px; }
+    .tc-progress-label { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+    .tc-progress-text { color:rgba(255,255,255,.45); font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+    .tc-progress-val  { color:#E8C57A; font-size:10px; font-weight:700; }
+    .tc-bar-bg  { height:4px; background:rgba(255,255,255,.08); border-radius:4px; overflow:hidden; }
+    .tc-bar-fill { height:100%; width:72%; background:linear-gradient(90deg,#C6A559,#E68979); border-radius:4px; animation: progressFill 1.4s cubic-bezier(.22,1,.36,1) .8s both; }
+    .tc-meta { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+    .tc-avg { color:rgba(255,255,255,.35); font-size:10px; font-weight:500; }
+    .tc-avg span { color:rgba(255,255,255,.65); font-weight:600; }
+
+    /* Glass card util */
+    .glass {
+      background:rgba(255,255,255,.86);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,.95);
+      box-shadow:0 8px 32px rgba(198,165,89,.1),0 2px 8px rgba(0,0,0,.04);
+    }
+
+    /* Pass rate float card */
+    .passrate-card { position:absolute; right:-18px; top:176px; width:204px; padding:16px; border-radius:18px; }
+    .pr-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .pr-icon { width:38px; height:38px; background:#FEF9EC; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .pr-label { font-size:11px; color:#6B6880; font-weight:500; }
+    .pr-val   { font-size:17px; font-weight:800; color:#0D0C22; }
+    .pr-bar-bg   { background:#FEF9EC; border-radius:6px; height:4px; overflow:hidden; }
+    .pr-bar-fill { height:100%; width:87%; background:linear-gradient(90deg,#C6A559,#E68979); border-radius:6px; }
+    .pr-pct { font-size:11px; color:#22C55E; font-weight:600; margin-top:5px; }
+
+    /* Recent runs card */
+    .runs-card { position:absolute; left:16px; bottom:36px; width:228px; padding:14px; border-radius:18px; }
+    .runs-heading { font-size:11px; color:#6B6880; font-weight:600; letter-spacing:.05em; text-transform:uppercase; margin-bottom:10px; }
+    .run-row { display:flex; align-items:center; gap:10px; }
+    .run-row + .run-row { margin-top:8px; }
+    .run-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
+    .run-name { font-size:12px; font-weight:600; color:#0D0C22; }
+    .run-sub  { font-size:11px; color:#6B6880; }
+    .run-status { font-size:11px; font-weight:700; margin-left:auto; white-space:nowrap; }
+    .run-pass { color:#22C55E; }
+    .run-fail { color:#EF4444; }
+
+    /* SOC2 badge */
+    .soc-badge { position:absolute; right:28px; bottom:84px; padding:9px 16px; border-radius:100px; display:flex; align-items:center; gap:8px; }
+    .soc-dot { width:22px; height:22px; background:linear-gradient(135deg,#22C55E,#4ADE80); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .soc-label { font-size:12px; font-weight:600; color:#0D0C22; white-space:nowrap; }
+
+    /* ── Partners bar ────────────────────────────── */
+    .partners { border-top:1px solid #F3EDDA; border-bottom:1px solid #F3EDDA; background:#FDFBF4; padding:32px 0; }
+    .partners-inner { max-width:1160px; margin:0 auto; padding:0 40px; }
+    .partners-label { text-align:center; font-size:12px; color:#9C9AB0; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:22px; }
+    .partners-logos { display:flex; align-items:center; justify-content:center; gap:52px; flex-wrap:wrap; }
+    .partner-name { font-size:17px; font-weight:800; color:#C8C2A8; letter-spacing:-.01em; }
+
+    /* ── Stats ───────────────────────────────────── */
+    .stats { padding:72px 0; }
+    .stats-inner { max-width:1160px; margin:0 auto; padding:0 40px; }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:40px; text-align:center; }
+    .stat-num {
+      font-size:clamp(38px,4vw,52px); font-weight:800; letter-spacing:-.04em;
+      background:linear-gradient(135deg,#0D0C22 0%,#C6A559 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .stat-label { font-size:14px; color:#6B6880; font-weight:500; margin-top:4px; }
+
+    /* ── Shared section ──────────────────────────── */
+    .section-wrap { max-width:1160px; margin:0 auto; padding:0 40px; }
+    .section-header { text-align:center; margin-bottom:60px; }
+    .section-chip {
+      display:inline-flex; align-items:center; gap:6px;
+      color:#C6A559; font-size:12px; font-weight:700;
+      letter-spacing:.08em; text-transform:uppercase; margin-bottom:14px;
+    }
+    .section-h2 { font-size:clamp(30px,3.8vw,48px); font-weight:800; letter-spacing:-.03em; color:#0D0C22; margin-bottom:16px; line-height:1.12; }
+    .section-sub { font-size:17px; color:#6B6880; max-width:520px; margin:0 auto; line-height:1.72; }
+
+    /* ── Features ────────────────────────────────── */
+    .features { padding:80px 0 100px; background:#FDFBF4; }
+    .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .feat-card {
+      background:white; border-radius:24px; padding:32px;
+      border:1px solid #F3EDDA;
+      box-shadow:0 4px 16px rgba(198,165,89,.06);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+    }
+    .feat-card:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(198,165,89,.14),0 6px 20px rgba(0,0,0,.04); }
+    .feat-card.dark { background:linear-gradient(135deg,#0D0C22 0%,#1E1C38 100%); border:none; }
+    .feat-icon-wrap { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+    .feat-h3 { font-size:19px; font-weight:700; color:#0D0C22; letter-spacing:-.02em; margin-bottom:12px; }
+    .feat-h3.light { color:white; }
+    .feat-p  { font-size:15px; line-height:1.72; color:#6B6880; }
+    .feat-p.light { color:rgba(255,255,255,.58); }
+    .feat-link { display:inline-flex; align-items:center; gap:6px; color:#D9B06A; font-size:14px; font-weight:600; margin-top:20px; text-decoration:none; transition: gap .2s; }
+    .feat-link:hover { gap:10px; }
+
+    /* ── How it works ────────────────────────────── */
+    .hiw { padding:80px 0 100px; }
+    .steps { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; position:relative; }
+    .step-con-1 { position:absolute; top:34px; left:calc(33.33% + 20px); width:calc(33.33% - 40px); height:2px; background:linear-gradient(90deg,#C6A559,#E68979); opacity:.3; }
+    .step-con-2 { position:absolute; top:34px; left:calc(66.66% + 20px); width:calc(33.33% - 40px); height:2px; background:linear-gradient(90deg,#E68979,#D4941E); opacity:.3; }
+    .step { text-align:center; padding:0 16px; }
+    .step-circle { width:68px; height:68px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
+    .step-tag { display:inline-block; padding:3px 11px; border-radius:100px; font-size:12px; font-weight:700; margin-bottom:12px; }
+    .step-h3 { font-size:20px; font-weight:700; color:#0D0C22; letter-spacing:-.02em; margin-bottom:12px; }
+    .step-p  { font-size:15px; line-height:1.72; color:#6B6880; }
+
+    /* ── Testimonials ────────────────────────────── */
+    .testimonials { padding:80px 0 100px; background:#FDFBF4; }
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .testi-card { border-radius:24px; padding:32px; transition: transform .3s cubic-bezier(.22,1,.36,1); }
+    .testi-card:hover { transform:translateY(-4px); }
+    .testi-card.white { background:white; border:1px solid #F3EDDA; box-shadow:0 4px 16px rgba(198,165,89,.06); }
+    .testi-card.gold  { background:linear-gradient(135deg,#C6A559,#E68979); }
+    .testi-stars { margin-bottom:16px; }
+    .testi-quote { font-size:15px; line-height:1.72; font-style:italic; margin-bottom:24px; }
+    .testi-quote.dark  { color:#44425A; }
+    .testi-quote.light { color:rgba(255,255,255,.92); }
+    .testi-footer { display:flex; align-items:center; gap:12px; }
+    .testi-av { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:14px; font-weight:700; flex-shrink:0; }
+    .testi-name { font-size:14px; font-weight:700; color:#0D0C22; }
+    .testi-name.light { color:white; }
+    .testi-role { font-size:12px; color:#6B6880; }
+    .testi-role.light { color:rgba(255,255,255,.7); }
+
+    /* ── Pricing ─────────────────────────────────── */
+    .pricing { padding:80px 0 100px; }
+    .pricing-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; align-items:start; }
+    .plan-card {
+      border-radius:24px; padding:36px;
+      border:1px solid #F3EDDA;
+      background:white;
+      box-shadow:0 4px 16px rgba(198,165,89,.06);
+      transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease;
+    }
+    .plan-card:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(198,165,89,.14); }
+    .plan-card.featured {
+      background:linear-gradient(160deg,#0D0C22 0%,#1E1C38 100%);
+      border:none;
+      box-shadow:0 24px 60px rgba(13,12,34,.35),0 8px 24px rgba(198,165,89,.18);
+      transform:scale(1.02);
+    }
+    .plan-card.featured:hover { transform:scale(1.02) translateY(-6px); }
+    .plan-tag { display:inline-block; padding:4px 12px; border-radius:100px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:16px; }
+    .plan-name { font-size:18px; font-weight:800; color:#0D0C22; letter-spacing:-.02em; margin-bottom:8px; }
+    .plan-name.light { color:white; }
+    .plan-desc { font-size:14px; color:#6B6880; line-height:1.6; margin-bottom:24px; }
+    .plan-desc.light { color:rgba(255,255,255,.55); }
+    .plan-price { display:flex; align-items:baseline; gap:4px; margin-bottom:28px; }
+    .plan-price-num { font-size:48px; font-weight:800; letter-spacing:-.04em; color:#0D0C22; }
+    .plan-price-num.light { color:white; }
+    .plan-price-num.grad { background:linear-gradient(135deg,#C6A559,#E68979); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .plan-price-period { font-size:15px; color:#6B6880; font-weight:500; }
+    .plan-price-period.light { color:rgba(255,255,255,.55); }
+    .plan-divider { height:1px; background:#F3EDDA; margin-bottom:24px; }
+    .plan-divider.light { background:rgba(255,255,255,.1); }
+    .plan-features { list-style:none; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
+    .plan-feature { display:flex; align-items:center; gap:10px; font-size:14px; color:#44425A; font-weight:500; }
+    .plan-feature.light { color:rgba(255,255,255,.75); }
+    .plan-check { width:18px; height:18px; border-radius:50%; background:#FEF9EC; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .plan-check.gold-bg { background:rgba(198,165,89,.2); }
+
+    /* ── CTA ─────────────────────────────────────── */
+    .cta-section { padding:80px 0 100px; }
+    .cta-box {
+      background:linear-gradient(135deg,#0D0C22 0%,#1E1C38 60%,#141430 100%);
+      border-radius:32px; padding:80px 60px; text-align:center;
+      position:relative; overflow:hidden;
+    }
+    .cta-blob-a { position:absolute; top:-80px; right:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(198,165,89,.32) 0%,transparent 70%); pointer-events:none; border-radius:50%; }
+    .cta-blob-b { position:absolute; bottom:-80px; left:-80px; width:320px; height:320px; background:radial-gradient(circle,rgba(230,137,121,.22) 0%,transparent 70%); pointer-events:none; border-radius:50%; }
+    .cta-inner { position:relative; z-index:1; }
+    .cta-tag {
+      display:inline-flex; align-items:center; gap:7px;
+      background:rgba(198,165,89,.15); color:#D9B06A;
+      padding:6px 16px; border-radius:100px;
+      font-size:13px; font-weight:600;
+      border:1px solid rgba(198,165,89,.25); margin-bottom:24px;
+    }
+    .cta-h2 { font-size:clamp(30px,3.8vw,52px); font-weight:800; letter-spacing:-.03em; color:white; margin-bottom:18px; line-height:1.1; }
+    .cta-sub { font-size:18px; line-height:1.72; color:rgba(255,255,255,.55); max-width:460px; margin:0 auto 40px; }
+    .cta-form { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; }
+    .cta-input {
+      padding:14px 20px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.07); color:white;
+      font-size:15px; width:288px; outline:none;
+      font-family:"Montserrat",inherit;
+      transition: border-color .2s;
+    }
+    .cta-input::placeholder { color:rgba(255,255,255,.35); }
+    .cta-input:focus { border-color:rgba(198,165,89,.7); }
+    .cta-note { font-size:13px; color:rgba(255,255,255,.35); margin-top:14px; }
+
+    /* ── Footer ──────────────────────────────────── */
+    .footer { border-top:1px solid #F3EDDA; background:white; padding:60px 0 40px; }
+    .footer-inner { max-width:1160px; margin:0 auto; padding:0 40px; }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; margin-bottom:48px; }
+    .footer-brand-name { font-size:18px; font-weight:800; color:#0D0C22; letter-spacing:-.03em; }
+    .footer-desc { font-size:14px; line-height:1.72; color:#6B6880; max-width:230px; margin-bottom:20px; }
+    .footer-socials { display:flex; gap:10px; }
+    .social-btn { width:36px; height:36px; background:#FEF9EC; border-radius:8px; display:flex; align-items:center; justify-content:center; text-decoration:none; transition: background .2s; }
+    .social-btn:hover { background:#F0DFA0; }
+    .footer-col-h { font-size:14px; font-weight:700; color:#0D0C22; letter-spacing:-.01em; margin-bottom:16px; }
+    .footer-links { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-links a { font-size:14px; color:#6B6880; text-decoration:none; transition:color .2s; }
+    .footer-links a:hover { color:#C6A559; }
+    .footer-bottom { display:flex; align-items:center; justify-content:space-between; padding-top:24px; border-top:1px solid #F3EDDA; }
+    .footer-copy { font-size:13px; color:#9C9AB0; }
+    .footer-legal { display:flex; gap:24px; }
+    .footer-legal a { font-size:13px; color:#9C9AB0; text-decoration:none; transition:color .2s; }
+    .footer-legal a:hover { color:#C6A559; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="brand_assets/Tester Logo.png" alt="Tester.io" style="width:36px;height:36px;object-fit:contain;">
+      <span class="nav-logo-name">Tester.io</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#features"     class="nav-link">Features</a>
+      <a href="#how-it-works" class="nav-link">How it works</a>
+      <a href="#pricing"      class="nav-link">Pricing</a>
+      <a href="#reviews"      class="nav-link">Reviews</a>
+    </div>
+
+    <div class="nav-actions">
+      <a href="#" class="nav-signin">Sign in</a>
+      <button class="btn btn-gold">Get Started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="blob-a" style="position:absolute;top:-100px;right:-100px;width:620px;height:620px;background:radial-gradient(circle,rgba(198,165,89,.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <div class="blob-b" style="position:absolute;bottom:-150px;left:-100px;width:540px;height:540px;background:radial-gradient(circle,rgba(230,137,121,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <div style="position:absolute;top:200px;left:38%;width:320px;height:320px;background:radial-gradient(circle,rgba(34,197,94,.04) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+
+  <div class="hero-inner">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="pill-badge">
+        <span class="pill-dot"></span>
+        Now in Public Beta &nbsp;·&nbsp; Try Free
+      </div>
+
+      <h1 class="hero-h1">
+        Ship Software<br>
+        <span class="grad-text">With Absolute</span>
+        <span class="cycle-wrap">
+          <span class="cycle-ghost">Confidence.</span>
+          <span class="cycle-word c1">Confidence.</span>
+          <span class="cycle-word c2">Precision.</span>
+          <span class="cycle-word c3">Velocity.</span>
+        </span>
+      </h1>
+
+      <p class="hero-sub">
+        Tester.io gives your team a premium quality assurance platform — automated testing, real-time insights, and enterprise-grade reliability from day one.
+      </p>
+
+      <div class="hero-ctas">
+        <button class="btn btn-gold" style="font-size:16px;padding:15px 32px;">Get Started Free</button>
+        <button class="btn btn-outline" style="font-size:16px;padding:15px 32px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/></svg>
+          Watch Demo
+        </button>
+      </div>
+
+      <div class="hero-trust">
+        <div class="avatar-stack">
+          <div class="av" style="background:linear-gradient(135deg,#C6A559,#E68979);z-index:4;">SM</div>
+          <div class="av" style="background:linear-gradient(135deg,#22C55E,#4ADE80);z-index:3;">JR</div>
+          <div class="av" style="background:linear-gradient(135deg,#3B82F6,#60A5FA);z-index:2;">AL</div>
+          <div class="av" style="background:linear-gradient(135deg,#EC4899,#F472B6);z-index:1;">+</div>
+        </div>
+        <div>
+          <div class="trust-stars">★★★★★</div>
+          <p class="trust-text">Trusted by <strong>4,200+</strong> engineering teams</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-right">
+      <div class="hero-visual">
+
+        <div class="hero-bg-blob"></div>
+
+        <!-- QA Engineer placeholder -->
+        <div class="hero-person">
+          <img src="https://placehold.co/236x340/FEF9EC/C6A559?text=QA+Engineer" alt="QA Engineer">
+        </div>
+
+        <!-- Test Runner Card -->
+        <div class="test-card card-f1">
+          <div class="test-card-inner">
+            <div class="tc-header">
+              <div class="tc-brand">
+                <img src="brand_assets/Tester Logo.png" alt="" style="width:18px;height:18px;object-fit:contain;">
+                <span class="tc-brand-name">Tester.io</span>
+                <span class="tc-live">LIVE</span>
+              </div>
+              <span class="tc-count">4 suites</span>
+            </div>
+            <div class="tc-divider"></div>
+
+            <div class="tc-test">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#4ADE80" stroke-width="1.5"/><polyline points="3.5,6 5.5,8 8.5,4" stroke="#4ADE80" stroke-width="1.5" fill="none"/></svg>
+              <span class="tc-test-name">Authentication Suite</span>
+              <span class="tc-badge tc-passed">PASSED</span>
+            </div>
+            <div class="tc-test">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#4ADE80" stroke-width="1.5"/><polyline points="3.5,6 5.5,8 8.5,4" stroke="#4ADE80" stroke-width="1.5" fill="none"/></svg>
+              <span class="tc-test-name">API Endpoints – INT/Test</span>
+              <span class="tc-badge tc-passed">PASSED</span>
+            </div>
+            <div class="tc-test">
+              <svg class="running-dot" width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#E8C57A" stroke-width="1.5"/><circle cx="6" cy="6" r="2" fill="#E8C57A"/></svg>
+              <span class="tc-test-name">Performance Benchmark</span>
+              <span class="tc-badge tc-running">RUNNING</span>
+            </div>
+            <div class="tc-test">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/></svg>
+              <span class="tc-test-name">Unit Tests – Auth Module</span>
+              <span class="tc-badge tc-queued">QUEUED</span>
+            </div>
+
+            <div class="tc-footer">
+              <div class="tc-progress-label">
+                <span class="tc-progress-text">Progress</span>
+                <span class="tc-progress-val">3 / 4 complete</span>
+              </div>
+              <div class="tc-bar-bg"><div class="tc-bar-fill"></div></div>
+              <div class="tc-meta">
+                <span class="tc-avg">Avg response: <span>69ms</span></span>
+                <span style="color:rgba(255,255,255,.3);font-size:10px;font-weight:500;">~2 min ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pass Rate card -->
+        <div class="passrate-card glass card-f2">
+          <div class="pr-head">
+            <div class="pr-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="2.5">
+                <polyline points="22,7 13.5,15.5 8.5,10.5 2,17"/><polyline points="16,7 22,7 22,13"/>
+              </svg>
+            </div>
+            <div>
+              <p class="pr-label">Pass Rate</p>
+              <p class="pr-val">98.7%</p>
+            </div>
+          </div>
+          <div class="pr-bar-bg"><div class="pr-bar-fill"></div></div>
+          <p class="pr-pct">↑ +2.3% this sprint</p>
+        </div>
+
+        <!-- Recent runs card -->
+        <div class="runs-card glass">
+          <p class="runs-heading">Recent Runs</p>
+          <div class="run-row">
+            <div class="run-icon" style="background:#F0FFF4;">✓</div>
+            <div>
+              <p class="run-name">Login Suite</p>
+              <p class="run-sub">42 tests</p>
+            </div>
+            <span class="run-status run-pass">PASSED</span>
+          </div>
+          <div class="run-row">
+            <div class="run-icon" style="background:#FFF0F0;">✗</div>
+            <div>
+              <p class="run-name">API Health Check</p>
+              <p class="run-sub">18 tests</p>
+            </div>
+            <span class="run-status run-fail">FAILED</span>
+          </div>
+        </div>
+
+        <!-- SOC 2 badge -->
+        <div class="soc-badge glass">
+          <div class="soc-dot">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <span class="soc-label">SOC 2 Compliant</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PARTNERS
+══════════════════════════════════════════════ -->
+<section class="partners">
+  <div class="partners-inner">
+    <p class="partners-label">Integrates with the tools your team already uses</p>
+    <div class="partners-logos">
+      <span class="partner-name">GITHUB</span>
+      <span class="partner-name">GITLAB</span>
+      <span class="partner-name">JENKINS</span>
+      <span class="partner-name">JIRA</span>
+      <span class="partner-name">SLACK</span>
+      <span class="partner-name">DATADOG</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     STATS
+══════════════════════════════════════════════ -->
+<section class="stats">
+  <div class="stats-inner">
+    <div class="stats-grid">
+      <div><p class="stat-num">98.7%</p><p class="stat-label">Bug detection rate</p></div>
+      <div><p class="stat-num">3.2×</p><p class="stat-label">Faster deployments</p></div>
+      <div><p class="stat-num">60%</p><p class="stat-label">Reduction in QA costs</p></div>
+      <div><p class="stat-num">10M+</p><p class="stat-label">Tests run monthly</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FEATURES
+══════════════════════════════════════════════ -->
+<section id="features" class="features">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-chip"><span>●</span>&nbsp;Features</div>
+      <h2 class="section-h2">Everything Your QA<br><span class="grad-text">Team Needs</span></h2>
+      <p class="section-sub">From automated regression to real-time browser monitoring — one powerful, collaboration-ready platform for building with confidence.</p>
+    </div>
+
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon-wrap" style="background:linear-gradient(135deg,#FEF9EC,#FBEECE);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="2">
+            <polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3">Automated Testing</h3>
+        <p class="feat-p">Run comprehensive test suites across all environments automatically. Schedule, configure triggers, and eliminate manual QA bottlenecks.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon-wrap" style="background:linear-gradient(135deg,#F0FFF4,#DCFCE7);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3">Real-Time Monitoring</h3>
+        <p class="feat-p">Live dashboards give instant visibility into test health. Catch failures the moment they happen with intelligent alerting.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon-wrap" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="13" y2="13"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3">Smart Reporting</h3>
+        <p class="feat-p">AI-powered reports surface what matters most. Track trends, identify flaky tests, and communicate quality to stakeholders clearly.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon-wrap" style="background:linear-gradient(135deg,#FFF0F8,#FCE7F3);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3">Team Collaboration</h3>
+        <p class="feat-p">Built for engineering teams of every size. Assign test owners, comment on failures, and sync with Jira, Slack, and Linear.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon-wrap" style="background:linear-gradient(135deg,#FFF8F0,#FFEDD5);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3">Historical Analysis</h3>
+        <p class="feat-p">Understand your quality trajectory over time. See how every change impacts reliability and identify patterns before they become problems.</p>
+      </div>
+
+      <div class="feat-card dark">
+        <div class="feat-icon-wrap" style="background:rgba(198,165,89,.22);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </div>
+        <h3 class="feat-h3 light">CI/CD Integration</h3>
+        <p class="feat-p light">Connect to GitHub Actions, Jenkins, CircleCI, and more. Quality gates block bad code from ever reaching production.</p>
+        <a href="#" class="feat-link">Learn more
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════════════ -->
+<section id="how-it-works" class="hiw">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-chip"><span>●</span>&nbsp;The Process</div>
+      <h2 class="section-h2">Up and Running in <span class="grad-text">Three Steps</span></h2>
+      <p class="section-sub">No lengthy setup. No consultants required. Connect your repo and ship with confidence in minutes.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step-con-1"></div>
+      <div class="step-con-2"></div>
+
+      <div class="step">
+        <div class="step-circle" style="background:linear-gradient(135deg,#C6A559,#E68979);box-shadow:0 12px 32px rgba(198,165,89,.38);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+        </div>
+        <span class="step-tag" style="background:#FEF9EC;color:#C6A559;">Step 01</span>
+        <h3 class="step-h3">Connect Your Repo</h3>
+        <p class="step-p">Link your GitHub, GitLab, or Bitbucket repository in seconds. We auto-detect your test frameworks and configure them automatically.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-circle" style="background:linear-gradient(135deg,#22C55E,#4ADE80);box-shadow:0 12px 32px rgba(34,197,94,.35);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </div>
+        <span class="step-tag" style="background:#F0FFF4;color:#22C55E;">Step 02</span>
+        <h3 class="step-h3">Define Your Tests</h3>
+        <p class="step-p">Import existing test suites or write new ones using our intuitive editor. Set quality thresholds and configure gates per branch.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-circle" style="background:linear-gradient(135deg,#F59E0B,#FBBF24);box-shadow:0 12px 32px rgba(245,158,11,.35);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+          </svg>
+        </div>
+        <span class="step-tag" style="background:#FFFBEB;color:#F59E0B;">Step 03</span>
+        <h3 class="step-h3">Ship With Confidence</h3>
+        <p class="step-p">Deploy knowing every commit has passed your quality gates. Get pass/fail badges on every PR and instant alerts when things break.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     TESTIMONIALS
+══════════════════════════════════════════════ -->
+<section id="reviews" class="testimonials">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-chip"><span>●</span>&nbsp;What Teams Say</div>
+      <h2 class="section-h2">Loved by Engineers<br><span class="grad-text">Trusted by Leaders</span></h2>
+    </div>
+
+    <div class="testi-grid">
+
+      <div class="testi-card white">
+        <div class="testi-stars" style="color:#F59E0B;font-size:17px;">★★★★★</div>
+        <p class="testi-quote dark">"Tester.io completely changed our release cadence. We went from weekly deployments to daily with zero regression incidents. The automated test suite is incredible."</p>
+        <div class="testi-footer">
+          <div class="testi-av" style="background:linear-gradient(135deg,#C6A559,#E68979);">SM</div>
+          <div>
+            <p class="testi-name">Sarah Mitchell</p>
+            <p class="testi-role">Lead QA Engineer, Veritas</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card gold">
+        <div class="testi-stars" style="color:rgba(255,255,255,.85);font-size:17px;">★★★★★</div>
+        <p class="testi-quote light">"The ROI was immediate. We caught a critical auth bug in staging that would have cost us thousands and our users' trust. Tester.io paid for itself in the first week."</p>
+        <div class="testi-footer">
+          <div class="testi-av" style="background:rgba(255,255,255,.25);">JR</div>
+          <div>
+            <p class="testi-name light">James Reynolds</p>
+            <p class="testi-role light">CTO, Axiom Technologies</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card white">
+        <div class="testi-stars" style="color:#F59E0B;font-size:17px;">★★★★★</div>
+        <p class="testi-quote dark">"Real-time monitoring caught a critical API failure before a single user noticed. The alerting is genuinely intelligent. This is the QA platform we've always needed."</p>
+        <div class="testi-footer">
+          <div class="testi-av" style="background:linear-gradient(135deg,#22C55E,#4ADE80);">AL</div>
+          <div>
+            <p class="testi-name">Alisa Liang</p>
+            <p class="testi-role">DevOps Lead, Meridian Cloud</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     PRICING
+══════════════════════════════════════════════ -->
+<section id="pricing" class="pricing">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-chip"><span>●</span>&nbsp;Simple Pricing</div>
+      <h2 class="section-h2">Choose Your <span class="grad-text">Plan</span></h2>
+      <p class="section-sub">No hidden fees. No per-seat surprises. Start free and scale when you're ready.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="plan-card">
+        <span class="plan-tag" style="background:#FEF9EC;color:#C6A559;">STARTER</span>
+        <h3 class="plan-name">Free Forever</h3>
+        <p class="plan-desc">Perfect for solo developers and small projects getting started with automated QA.</p>
+        <div class="plan-price">
+          <span class="plan-price-num">$0</span>
+          <span class="plan-price-period">/month</span>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            1 project
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            100 test runs / month
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Community support
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Basic reporting
+          </li>
+        </ul>
+        <button class="btn btn-outline" style="width:100%;padding:14px;font-size:15px;border-radius:12px;">Get Started Free</button>
+      </div>
+
+      <!-- Pro (featured) -->
+      <div class="plan-card featured">
+        <span class="plan-tag" style="background:rgba(198,165,89,.2);color:#D9B06A;border:1px solid rgba(198,165,89,.3);">MOST POPULAR</span>
+        <h3 class="plan-name light">Pro</h3>
+        <p class="plan-desc light">For growing teams that need unlimited testing power and advanced analytics.</p>
+        <div class="plan-price">
+          <span class="plan-price-num grad">$49</span>
+          <span class="plan-price-period light">/month</span>
+        </div>
+        <div class="plan-divider light"></div>
+        <ul class="plan-features">
+          <li class="plan-feature light">
+            <div class="plan-check gold-bg"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Unlimited projects
+          </li>
+          <li class="plan-feature light">
+            <div class="plan-check gold-bg"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Unlimited test runs
+          </li>
+          <li class="plan-feature light">
+            <div class="plan-check gold-bg"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Priority support
+          </li>
+          <li class="plan-feature light">
+            <div class="plan-check gold-bg"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Advanced analytics &amp; AI insights
+          </li>
+          <li class="plan-feature light">
+            <div class="plan-check gold-bg"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#D9B06A" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            CI/CD integration
+          </li>
+        </ul>
+        <button class="btn btn-gold" style="width:100%;padding:14px;font-size:15px;border-radius:12px;">Get Started</button>
+      </div>
+
+      <!-- Custom -->
+      <div class="plan-card">
+        <span class="plan-tag" style="background:#F3F4F6;color:#6B6880;">ENTERPRISE</span>
+        <h3 class="plan-name">Custom</h3>
+        <p class="plan-desc">Built for large orgs with custom compliance, on-premise, and dedicated SLA requirements.</p>
+        <div class="plan-price">
+          <span class="plan-price-num" style="font-size:36px;">Custom</span>
+        </div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Unlimited everything
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Dedicated support team
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            Custom integrations
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            99.99% SLA guarantee
+          </li>
+          <li class="plan-feature">
+            <div class="plan-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C6A559" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></div>
+            On-premise option
+          </li>
+        </ul>
+        <button class="btn btn-dark" style="width:100%;padding:14px;font-size:15px;border-radius:12px;">Contact Sales</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     CTA
+══════════════════════════════════════════════ -->
+<section class="cta-section">
+  <div class="section-wrap">
+    <div class="cta-box">
+      <div class="cta-blob-a"></div>
+      <div class="cta-blob-b"></div>
+      <div class="cta-inner">
+        <div class="cta-tag"><span>✦</span> Start for free — no credit card required</div>
+        <h2 class="cta-h2">Ready to ship with confidence?</h2>
+        <p class="cta-sub">Join 4,200+ engineering teams already using Tester.io to catch bugs before they reach production.</p>
+        <div class="cta-form">
+          <input type="email" placeholder="Enter your work email" class="cta-input">
+          <button class="btn btn-gold" style="font-size:16px;padding:14px 32px;">Get Started Free</button>
+        </div>
+        <p class="cta-note">99.9% uptime SLA · SOC 2 compliant · Cancel anytime</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <img src="brand_assets/Tester Logo.png" alt="Tester.io" style="width:30px;height:30px;object-fit:contain;">
+          <span class="footer-brand-name">Tester.io</span>
+        </div>
+        <p class="footer-desc">Premium quality assurance for engineering teams who ship with confidence.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Twitter">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#9C9AB0"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="GitHub">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9C9AB0" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="LinkedIn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9C9AB0" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-col-h">Product</h4>
+        <ul class="footer-links">
+          <li><a href="#">Features</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">Changelog</a></li>
+          <li><a href="#">Integrations</a></li>
+          <li><a href="#">API Docs</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-h">Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-h">Support</h4>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Status</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2024 Tester.io, Inc. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
