@@ -35,12 +35,38 @@
       --font-ui:      "Montserrat", "Helvetica Neue", Arial, sans-serif;
       --font-mono:    "JetBrains Mono", ui-monospace, monospace;
 
-      --max: 1240px;
-      --pad: 48px;
+      /* Container widths */
+      --max: 1240px;                         /* outer content cap */
+      --max-text: 62ch;                      /* long-form body paragraphs */
+      --max-text-sm: 48ch;                   /* section descriptions */
+      --max-hero-sub: 52ch;                  /* hero subtitle */
 
-      /* Rhythm & surface tokens */
-      --section-pad: 112px;
-      --section-pad-sm: 80px;
+      /* Horizontal gutter — fluid */
+      --pad: clamp(20px, 4.2vw, 48px);
+
+      /* Vertical rhythm — fluid, anchored to a single scale */
+      --section-pad:    clamp(72px, 9vw, 112px);
+      --section-pad-sm: clamp(56px, 7vw, 80px);
+
+      /* Modular spacing scale (all fluid, all sourced from one system) */
+      --space-1: clamp(6px,  0.6vw, 8px);
+      --space-2: clamp(10px, 1vw, 14px);
+      --space-3: clamp(14px, 1.6vw, 20px);
+      --space-4: clamp(20px, 2.2vw, 28px);
+      --space-5: clamp(28px, 3vw, 40px);
+      --space-6: clamp(40px, 4.5vw, 56px);
+      --space-7: clamp(56px, 6vw, 72px);
+
+      /* Typography — fluid scale */
+      --fs-micro:   11px;
+      --fs-small:   13px;
+      --fs-body:    clamp(15px, 0.5vw + 13px, 16px);
+      --fs-lead:    clamp(16px, 0.6vw + 14px, 18px);
+      --fs-h3:      clamp(20px, 0.8vw + 16px, 24px);
+      --fs-h2:      clamp(32px, 3.6vw + 8px, 60px);
+      --fs-h1:      clamp(42px, 4.6vw + 12px, 80px);
+
+      /* Surface tokens */
       --radius-card:    20px;
       --radius-card-lg: 24px;
       --radius-pill:    999px;
@@ -64,7 +90,7 @@
       font-family: var(--font-ui);
       background: var(--base);
       color: var(--ink);
-      font-size: 16px;
+      font-size: var(--fs-body);
       line-height: 1.7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -306,6 +332,7 @@
       padding: 8px 4px;
       border-bottom: 1px solid transparent;
       transition: color .2s, border-color .2s;
+      white-space: nowrap;
     }
     .nav-sign:hover { color: var(--gold); border-bottom-color: var(--gold); }
     .btn-nav { padding: 10px 18px; font-size: 13px; }
@@ -388,8 +415,8 @@
     }
 
     .hero-h1 {
-      font-size: clamp(42px, 5.4vw, 78px);
-      margin-bottom: 28px;
+      font-size: var(--fs-h1);
+      margin-bottom: var(--space-4);
     }
     .hero-h1 .ln-1 { display: block; color: var(--ink); }
     .hero-h1 .ln-2 {
@@ -432,11 +459,11 @@
     .cycle-word.w3 { animation-delay: 7s; }
 
     .hero-sub {
-      font-size: 18px;
+      font-size: var(--fs-lead);
       line-height: 1.65;
       color: var(--ink-mute);
-      max-width: 520px;
-      margin-bottom: 40px;
+      max-width: var(--max-hero-sub);
+      margin-bottom: var(--space-5);
     }
     .hero-sub strong {
       color: var(--ink-2);
@@ -445,8 +472,8 @@
 
     .hero-ctas {
       display: flex; align-items: center;
-      gap: 16px;
-      margin-bottom: 56px;
+      gap: var(--space-2);
+      margin-bottom: var(--space-6);
       flex-wrap: wrap;
     }
 
@@ -816,10 +843,10 @@
     .section-header {
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-      gap: 64px;
+      gap: var(--space-6);
       align-items: flex-end;
-      margin-bottom: 72px;
-      padding-bottom: 32px;
+      margin-bottom: var(--space-7);
+      padding-bottom: var(--space-4);
       border-bottom: 1px solid var(--line);
     }
     .section-number {
@@ -833,7 +860,7 @@
     }
     .section-number .sep { color: var(--ink-dim); }
     .section-h2 {
-      font-size: clamp(36px, 4.6vw, 64px);
+      font-size: var(--fs-h2);
       color: var(--ink);
     }
     .section-h2 em {
@@ -843,10 +870,10 @@
       color: var(--gold);
     }
     .section-desc {
-      font-size: 16px;
+      font-size: var(--fs-body);
       line-height: 1.7;
       color: var(--ink-mute);
-      max-width: 420px;
+      max-width: var(--max-text-sm);
       padding-bottom: 6px;
     }
 
@@ -920,7 +947,7 @@
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius-card);
-      padding: 36px;
+      padding: clamp(24px, 2.5vw, 36px);
       transition: transform .4s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .3s;
       overflow: hidden;
       box-shadow: var(--shadow-card);
@@ -1221,7 +1248,7 @@
     }
     .testi {
       position: relative;
-      padding: 40px;
+      padding: clamp(24px, 2.8vw, 40px);
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius-card);
@@ -1333,7 +1360,7 @@
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: var(--radius-card);
-      padding: 40px;
+      padding: clamp(28px, 2.8vw, 40px);
       position: relative;
       display: flex; flex-direction: column;
       box-shadow: var(--shadow-card);
@@ -1680,33 +1707,161 @@
       pointer-events: none;
     }
 
-    /* ─── Responsive ─── */
+    /* ─── Responsive ───────────────────────────────
+       Only 3 structural breakpoints; everything else
+       flows via clamp() tokens for smooth transitions.
+
+       — 1100px: desktop → large tablet (hero stacks,
+         features collapse from 12-col to 6-col)
+       — 900px:  large tablet → small tablet (3-col
+         grids become 2-col, featured card fills row)
+       — 640px:  tablet → mobile (everything 1-col,
+         buttons go full-width, tap-targets grow)
+    ─────────────────────────────────────────────── */
+
+    /* 1100px — hero only: console composition needs true desktop width */
     @media (max-width: 1100px) {
-      :root { --pad: 36px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 60px; }
-      .hero-visual { height: auto; min-height: 560px; }
+      .hero-inner {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--space-6);
+      }
+      .hero-visual { height: auto; min-height: 560px; max-width: 640px; }
+
+      /* Section-header stacks: two-col heading/desc is awkward below ~1100px */
+      .section-header {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+        align-items: flex-start;
+      }
+
+      /* Stats become 2x2 only below 960 (keep 4-col at 1024 laptops) */
+    }
+
+    /* 960px — secondary structural reflow for smaller laptops & large tablets */
+    @media (max-width: 960px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .stat { border-right: none; border-bottom: 1px solid var(--line); }
-      .process-grid { grid-template-columns: 1fr; gap: 56px; }
-      .process-grid::before { display: none; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: repeat(6, 1fr); }
-      .feat-hero, .feat-std, .feat-wide, .feat-narrow, .feat-third { grid-column: span 6; }
-      .testi-grid { grid-template-columns: 1fr; }
-      .testi-big, .testi-md, .testi-sm, .testi-lg-2 { grid-column: span 1; }
-      .section-header { grid-template-columns: 1fr; gap: 20px; }
-      .section-desc { margin-left: 0; }
+      .stat:nth-last-child(-n+2) { border-bottom: none; }
+
+      /* Features: flagship full-width, everything else pairs up 2-col */
+      .feat-hero { grid-column: span 12; }
+      .feat-std, .feat-wide, .feat-narrow, .feat-third { grid-column: span 6; }
+
+      /* Testimonials: featured full, smaller pair up */
+      .testi-big, .testi-lg-2 { grid-column: span 12; }
+      .testi-md, .testi-sm { grid-column: span 6; }
+
       .footer-brand-row { grid-template-columns: 1fr 1fr; }
     }
-    @media (max-width: 700px) {
-      :root { --pad: 24px; }
+
+    /* Tablet — 500-860px: bigger structural reflows */
+    @media (max-width: 860px) {
+      /* Nav links collapse so CTA never clips */
       .nav-links { display: none; }
+      .nav-inner { gap: var(--space-3); }
+
+      .hero-visual { min-height: 520px; }
+
+      /* Flagship feature card: internal ring viz stacks below text */
+      .feat-hero { grid-template-columns: 1fr; }
+      .feat-hero-viz {
+        grid-column: 1; grid-row: auto;
+        width: 100%; max-width: 220px; margin: 0 auto;
+      }
+
+      /* Process: 3-col layout breaks; use single column with left-aligned steps */
+      .process-grid { grid-template-columns: 1fr; gap: var(--space-6); }
+      .process-grid::before { display: none; }
+
+      /* Pricing stacks but uses full width of tablet (not the narrow 520 cap) */
+      .pricing-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+
+      /* Features: all cards full width below 860 */
+      .feat-hero, .feat-std, .feat-wide, .feat-narrow, .feat-third { grid-column: span 12; }
+
+      /* Testimonials full width below 860 */
+      .testi-big, .testi-md, .testi-sm, .testi-lg-2 { grid-column: span 12; }
+
+      .footer-brand-row {
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+      }
+      /* Pass card was left-offset for overlap; safer centered on tablet */
+      .pass-card { left: 0; }
+      .time-card { right: 0; }
+      /* Console stops bleeding past the column edge */
+      .console { right: 0; }
+    }
+
+    /* Mobile — ≤ 640px */
+    @media (max-width: 640px) {
+      .nav-inner { gap: var(--space-2); height: 64px; }
+      .nav-brand span { font-size: 18px; }
+
+      .ticker { font-size: 10px; }
+      .ticker-track { gap: 36px; padding: 8px 0; }
+
+      .hero { padding: var(--space-5) 0 var(--section-pad); }
+      .hero-visual { min-height: 560px; }
+      .hero-eyebrow-tag { display: none; }
+
+      .hero-proof {
+        flex-wrap: wrap;
+        gap: var(--space-2);
+      }
+      .hero-proof-divider { display: none; }
+      .hero-proof-text { flex-basis: calc(100% - 140px); }
+
       .stats-grid { grid-template-columns: 1fr; }
+      .stat { border-bottom: 1px solid var(--line); padding: var(--space-4) 0; }
+      .stat:last-child { border-bottom: none; }
+
       .features-grid { grid-template-columns: 1fr; }
       .feat-hero, .feat-std, .feat-wide, .feat-narrow, .feat-third { grid-column: span 1; }
-      .cta { padding: 60px 32px; }
-      .footer-brand-row { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; }
+
+      .testi-grid { grid-template-columns: 1fr; }
+      .testi-big, .testi-md, .testi-sm, .testi-lg-2 { grid-column: span 1; }
+      .testi-big .testi-quote { font-size: 20px; }
+
+      .pricing-grid { max-width: none; }
+      .plan-featured { transform: none; }
+
+      /* Bigger tap targets — min 48px height */
+      .btn {
+        padding: 15px 24px;
+        font-size: 15px;
+        min-height: 48px;
+      }
+      /* On mobile, hero CTAs go full-width and stack cleanly */
+      .hero-ctas { flex-direction: column; align-items: stretch; gap: var(--space-2); }
+      .hero-ctas .btn { width: 100%; justify-content: center; }
+
+      .cta { padding: var(--space-6) var(--space-4); }
+      .cta-form {
+        flex-direction: column;
+        border-radius: var(--radius-card);
+        padding: var(--space-2);
+        gap: var(--space-2);
+      }
+      .cta-input { width: 100%; padding: 14px 16px; }
+      .cta-form .btn { width: 100%; justify-content: center; }
+
+      .footer { padding-top: var(--space-6); }
+      .footer-brand-row { gap: var(--space-5); padding-bottom: var(--space-5); }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+    }
+
+    /* Very small phones — protect readability */
+    @media (max-width: 380px) {
+      .hero-h1 { font-size: clamp(36px, 10vw, 48px); }
+      .section-h2 { font-size: clamp(30px, 9vw, 40px); }
+      .console-body { padding: 14px 16px; }
+      .console-row { font-size: 11px; grid-template-columns: 18px 1fr auto; gap: 8px; }
+      /* Sign in hides on ultra-narrow — only logo + primary CTA fit */
+      .nav-sign { display: none; }
+      .nav-brand span { font-size: 17px; }
+      .nav-brand img { width: 26px; height: 26px; }
+      .btn-nav { padding: 9px 14px; font-size: 12px; }
     }
   </style>
 </head>
