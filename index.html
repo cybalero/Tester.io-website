@@ -1203,6 +1203,176 @@
       .tech-card-cta .btn { width: 100%; justify-content: center; }
     }
 
+    /* ─── Tester Tech device grid ─── */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(14px, 1.6vw, 22px);
+    }
+    .device-card {
+      position: relative;
+      display: flex; flex-direction: column;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(212, 168, 82, .08), transparent 60%),
+        linear-gradient(180deg, #15110B 0%, #0B0908 100%);
+      border: 1px solid rgba(212, 168, 82, .18);
+      color: var(--ink);
+      text-decoration: none;
+      box-shadow:
+        0 30px 70px -30px rgba(0, 0, 0, .9),
+        0 0 0 1px rgba(239, 210, 138, .04) inset;
+      transition: transform .5s cubic-bezier(.22,1,.36,1),
+                  border-color .3s,
+                  box-shadow .5s;
+    }
+    .device-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 168, 82, .45);
+      box-shadow:
+        0 44px 90px -28px rgba(0, 0, 0, .95),
+        0 0 0 1px rgba(239, 210, 138, .1) inset;
+    }
+    .device-card:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .device-media {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: #000;
+    }
+    .device-media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.1s cubic-bezier(.22,1,.36,1), filter .6s ease;
+      filter: saturate(.94);
+      opacity: .92;
+    }
+    .device-card:hover .device-media img {
+      transform: scale(1.06);
+      filter: saturate(1.05);
+      opacity: 1;
+    }
+    .device-media::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(11, 9, 8, .75) 100%);
+      pointer-events: none;
+    }
+    .device-chip {
+      position: absolute;
+      top: 14px; left: 14px;
+      z-index: 2;
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 10px;
+      background: rgba(11, 9, 8, .72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(239, 210, 138, .2);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-hi);
+    }
+    .device-chip .dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+    }
+
+    .device-body {
+      padding: clamp(18px, 1.8vw, 24px) clamp(20px, 1.8vw, 26px) clamp(18px, 1.8vw, 22px);
+      display: flex; flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .device-kicker {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .device-h {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(20px, 1.4vw + 12px, 28px);
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      color: var(--ink);
+      margin: 0;
+    }
+    .device-h em {
+      font-style: italic; font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--gold-hi);
+    }
+    .device-p {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink-mute);
+      margin: 0;
+    }
+    .device-foot {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid rgba(239, 210, 138, .1);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px;
+    }
+    .device-spec {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .device-spec b {
+      color: var(--gold-hi);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0;
+      font-family: var(--font-display);
+    }
+    .device-arrow {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--gold);
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .device-card:hover .device-arrow {
+      transform: translateX(5px);
+    }
+
+    .tech-foot {
+      margin-top: clamp(28px, 4vw, 48px);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .tech-foot-note {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    @media (max-width: 1040px) {
+      .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .tech-grid { grid-template-columns: 1fr; }
+      .tech-foot { flex-direction: column; align-items: stretch; }
+      .tech-foot .btn { justify-content: center; }
+    }
+
     /* ─── Features ─── */
     .features-grid {
       display: grid;
@@ -2317,13 +2487,197 @@
       color: #8A5A2E;
     }
 
+    /* ─── Sights teaser: two-landmark grid ─── */
+    .sights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(18px, 2vw, 28px);
+    }
+    .landmark-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: linear-gradient(180deg, #F5EDDC 0%, #ECDFC4 100%);
+      border: 1px solid rgba(212, 168, 82, .25);
+      color: #2A1E10;
+      text-decoration: none;
+      box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .85);
+      transition: transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s, border-color .3s;
+    }
+    .landmark-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 168, 82, .55);
+      box-shadow: 0 44px 100px -30px rgba(0, 0, 0, .9);
+    }
+    .landmark-card:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    /* Dark variant — mirrors the obsidian Taj aesthetic */
+    .landmark-card--dark {
+      background: linear-gradient(180deg, #13171C 0%, #0A0C10 100%);
+      color: #E8EEF5;
+      border-color: rgba(149, 198, 224, .22);
+    }
+    .landmark-card--dark:hover {
+      border-color: rgba(149, 198, 224, .45);
+    }
+
+    .landmark-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #000;
+    }
+    .landmark-media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.1s cubic-bezier(.22,1,.36,1), filter .6s ease;
+      filter: saturate(.94) contrast(1.02);
+    }
+    .landmark-card:hover .landmark-media img {
+      transform: scale(1.05);
+      filter: saturate(1.05) contrast(1.05);
+    }
+    .landmark-media::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 110%, rgba(20, 14, 8, .35), transparent 55%);
+      pointer-events: none;
+    }
+    .landmark-card--dark .landmark-media::after {
+      background: radial-gradient(ellipse at 50% 110%, rgba(0, 0, 0, .55), transparent 60%);
+    }
+
+    .landmark-chip {
+      position: absolute;
+      top: 18px; left: 18px;
+      z-index: 2;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: rgba(20, 14, 8, .72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(245, 237, 220, .18);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #EFE6D1;
+    }
+    .landmark-chip .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #C27A47;
+      box-shadow: 0 0 8px #C27A47;
+    }
+    .landmark-card--dark .landmark-chip .dot {
+      background: #6DC7E2;
+      box-shadow: 0 0 8px #6DC7E2;
+    }
+
+    .landmark-body {
+      padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 36px) clamp(22px, 2.6vw, 32px);
+      display: flex; flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .landmark-meta {
+      display: flex; gap: 18px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #8A5A2E;
+    }
+    .landmark-card--dark .landmark-meta { color: #6A85A0; }
+
+    .landmark-h {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(28px, 2.8vw + 8px, 44px);
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: #2A1E10;
+      margin: 0;
+    }
+    .landmark-h em {
+      font-style: italic; font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: #A64B3E;
+    }
+    .landmark-card--dark .landmark-h { color: #F2EDE4; }
+    .landmark-card--dark .landmark-h em {
+      color: #8AD4EB;
+    }
+
+    .landmark-p {
+      font-family: var(--font-display);
+      font-size: 14px;
+      line-height: 1.65;
+      color: #4A3624;
+      margin: 0;
+      max-width: 44ch;
+    }
+    .landmark-card--dark .landmark-p { color: #B8C4D2; }
+
+    .landmark-foot {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(42, 18, 12, .15);
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .landmark-card--dark .landmark-foot {
+      border-top-color: rgba(149, 198, 224, .18);
+    }
+    .landmark-cta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #A64B3E;
+      font-weight: 600;
+    }
+    .landmark-card--dark .landmark-cta { color: #8AD4EB; }
+    .landmark-cta .arr {
+      display: inline-block;
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+      margin-left: 4px;
+    }
+    .landmark-card:hover .landmark-cta .arr {
+      transform: translateX(5px);
+    }
+    .landmark-dur {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #8A5A2E;
+    }
+    .landmark-card--dark .landmark-dur { color: #6A85A0; }
+
+    /* Footer of the whole teaser — single CTA across both cards */
+    .sights-foot {
+      margin-top: clamp(28px, 4vw, 44px);
+      display: flex; align-items: center; gap: 18px;
+      flex-wrap: wrap;
+    }
+
     @media (max-width: 860px) {
       .sights-card { grid-template-columns: 1fr; }
       .sights-media { min-height: 320px; aspect-ratio: 16 / 9; }
+      .sights-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .sights-cta { width: 100%; }
       .sights-cta .btn-rust { width: 100%; justify-content: center; }
+      .sights-foot { flex-direction: column; align-items: stretch; }
+      .sights-foot .btn-rust { justify-content: center; }
     }
   </style>
 </head>
@@ -2808,57 +3162,92 @@
 </section>
 
 <!-- ══════════════════════════════════════════════
-     TESTER TECH
+     TESTER TECH  ·  device lineup
 ══════════════════════════════════════════════ -->
 <section id="tech" class="section">
   <div class="wrap">
     <div class="section-header">
       <div>
         <div class="section-number">§ 03 <span class="sep">—</span> Tester Tech</div>
-        <h2 class="section-h2 display">The engine,<br><em>exposed.</em></h2>
+        <h2 class="section-h2 display">Connected devices,<br><em>built well.</em></h2>
       </div>
-      <p class="section-desc">A deliberate stack three years in the making — the Rust runner core, the WASM sandbox, the signal processing. See what Tester.io is actually built on.</p>
+      <p class="section-desc">Four form factors, one shared firmware platform. Repair-first design, open firmware, no telemetry leaving your network — consumer tech we'd build if we had a factory. We do.</p>
     </div>
 
-    <div class="tech-card">
-      <div class="tech-card-body">
-        <div class="tech-card-label"><span class="dot"></span>Under the hood</div>
-        <h3 class="tech-card-h">Built to be <em>inspected.</em></h3>
-        <p class="tech-card-p">Every layer of the platform is documented, measured, and open for scrutiny. The <strong>runner core</strong>, the <strong>sandbox</strong>, the <strong>inference stack</strong> — all there to read, benchmark, and extend. No black boxes, no "trust us" architecture diagrams.</p>
+    <div class="tech-grid">
+      <a href="TesterTech.html#watches" class="device-card">
+        <div class="device-media">
+          <img src="brand_assets/watch-frames/frame-18.webp" alt="Smart Watch Pro — titanium case, AMOLED display">
+          <span class="device-chip"><span class="dot"></span>Wrist</span>
+        </div>
+        <div class="device-body">
+          <div class="device-kicker">§ 01 · Smartwatch</div>
+          <h3 class="device-h">Smart Watch <em>Pro.</em></h3>
+          <p class="device-p">Grade-5 titanium, sapphire crystal, medical-grade ECG, dual-band GPS — and a 48-hour battery that finally means what it says.</p>
+          <div class="device-foot">
+            <span class="device-spec">From <b>$499</b></span>
+            <span class="device-arrow">→</span>
+          </div>
+        </div>
+      </a>
 
-        <div class="tech-card-cta">
-          <a href="TesterTech.html" class="btn btn-gold">
-            Explore Tester Tech
-            <span class="arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-            </span>
-          </a>
-          <span class="tech-card-note">Open · documented · benchmarked</span>
+      <a href="TesterTech.html#glasses" class="device-card">
+        <div class="device-media">
+          <img src="brand_assets/generated/glasses-card.png" alt="Smart Glasses — matte titanium frame">
+          <span class="device-chip"><span class="dot"></span>Face</span>
         </div>
-      </div>
+        <div class="device-body">
+          <div class="device-kicker">§ 02 · Eyewear</div>
+          <h3 class="device-h">Smart <em>Glasses.</em></h3>
+          <p class="device-p">A 720p waveguide display that disappears when you're not looking at it. Open-ear audio, 12MP camera, 38g titanium, prescription-ready.</p>
+          <div class="device-foot">
+            <span class="device-spec">From <b>$449</b></span>
+            <span class="device-arrow">→</span>
+          </div>
+        </div>
+      </a>
 
-      <div class="tech-stack">
-        <div class="tech-tile">
-          <div class="tech-tile-label">Runner</div>
-          <div class="tech-tile-val">Rust <em>core</em></div>
-          <div class="tech-tile-sub">zero-copy, SIMD-vectorised suite execution</div>
+      <a href="TesterTech.html#assistants" class="device-card">
+        <div class="device-media">
+          <img src="brand_assets/generated/assistant-card.png" alt="Smart Assistant speaker — brushed aluminum and fabric mesh">
+          <span class="device-chip"><span class="dot"></span>Voice</span>
         </div>
-        <div class="tech-tile">
-          <div class="tech-tile-label">Isolation</div>
-          <div class="tech-tile-val">WASM <em>sandbox</em></div>
-          <div class="tech-tile-sub">deterministic, capability-gated by default</div>
+        <div class="device-body">
+          <div class="device-kicker">§ 03 · Speaker</div>
+          <h3 class="device-h">Smart <em>Assistant.</em></h3>
+          <p class="device-p">Six-mic far-field array, on-device speech recognition, and nothing goes to the cloud unless you say so. A 270° woofer fills a room without shouting.</p>
+          <div class="device-foot">
+            <span class="device-spec">From <b>$249</b></span>
+            <span class="device-arrow">→</span>
+          </div>
         </div>
-        <div class="tech-tile">
-          <div class="tech-tile-label">Inference</div>
-          <div class="tech-tile-val">Flake <em>model</em></div>
-          <div class="tech-tile-sub">on-device, under 40ms, no data leaves</div>
+      </a>
+
+      <a href="TesterTech.html#home" class="device-card">
+        <div class="device-media">
+          <img src="brand_assets/generated/hub-card.png" alt="Smart Home Hub — white ceramic with amber glow ring">
+          <span class="device-chip"><span class="dot"></span>Ambient</span>
         </div>
-        <div class="tech-tile">
-          <div class="tech-tile-label">Pipeline</div>
-          <div class="tech-tile-val">Edge <em>native</em></div>
-          <div class="tech-tile-sub">runs in your CI, no external dependencies</div>
+        <div class="device-body">
+          <div class="device-kicker">§ 04 · Home</div>
+          <h3 class="device-h">Home <em>Hub.</em></h3>
+          <p class="device-p">A matchbox-sized Matter hub with Thread border router. Six sensor types, two-year CR2032 battery, sub-50 ms local latency. Works when your internet doesn't.</p>
+          <div class="device-foot">
+            <span class="device-spec">From <b>$79</b></span>
+            <span class="device-arrow">→</span>
+          </div>
         </div>
-      </div>
+      </a>
+    </div>
+
+    <div class="tech-foot">
+      <a href="TesterTech.html" class="btn btn-gold">
+        Explore Tester Tech
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <span class="tech-foot-note">Open firmware · 5-yr repair guarantee · Made in small batches</span>
     </div>
   </div>
 </section>
@@ -2873,37 +3262,62 @@
         <div class="section-number">§ +<span class="sep">—</span> Off the Clock</div>
         <h2 class="section-h2 display">Something <em>quieter.</em></h2>
       </div>
-      <p class="section-desc">A travel editorial we've been writing between builds. No affiliate links, no itineraries, no top-ten lists — just slow essays and film photographs from places that asked us to stay a little longer.</p>
+      <p class="section-desc">A scroll-driven editorial we've been building between builds. Two landmarks, three acts each — from line on paper to stone in the sun to geometry in the dark.</p>
     </div>
 
-    <article class="sights-card">
-      <div class="sights-media">
-        <img src="brand_assets/generated/sights-hero.png" alt="Misty Nordic fjord at dawn — Sights editorial preview">
-        <span class="sights-chip"><span class="dot"></span>Vol. 01 · Slow Travel</span>
-        <div class="sights-caption">
-          <span>Nordic fjords <span class="no">№ 01</span></span>
-          <span>Shot on Portra 400</span>
+    <div class="sights-grid">
+      <!-- № 01 · Sagrada Familia -->
+      <a href="Sights.html#sagrada-stage" class="landmark-card" aria-label="Open La Sagrada Familia scroll animation">
+        <div class="landmark-media">
+          <img src="brand_assets/sagrada-frames/frame-121.jpg" alt="La Sagrada Familia — final render from the scroll animation">
+          <span class="landmark-chip"><span class="dot"></span>№ 01 · Barcelona</span>
         </div>
-      </div>
-
-      <div class="sights-body">
-        <div class="sights-label"><span class="mark"></span>A reading room</div>
-        <h3 class="sights-h">The scenic <em>route.</em></h3>
-        <p class="sights-p">Seven essays from seven places we found by accident — a fjord at dawn, a moss path in Kyoto, a riad in Marrakech where nobody was in a hurry. <strong>Written slowly.</strong> Meant to be read the same way.</p>
-
-        <div class="sights-cta">
-          <a href="Sights.html" class="btn-rust">
-            Open Sights
-            <span class="arrow">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M13 5l7 7-7 7"/>
-              </svg>
-            </span>
-          </a>
-          <span class="sights-note">7 pieces · ~ 40 min read</span>
+        <div class="landmark-body">
+          <div class="landmark-meta">
+            <span>41° 24′ 13″ N</span>
+            <span>1882 →</span>
+          </div>
+          <h3 class="landmark-h">La <em>Sagrada</em><br>Familia.</h3>
+          <p class="landmark-p">Gaudí drew it in 1882 — every column a catenary, every arch a calculation. A cathedral of lines before it was a cathedral of stone. 121 frames from blueprint to dusk.</p>
+          <div class="landmark-foot">
+            <span class="landmark-cta">Open the sequence <span class="arr">→</span></span>
+            <span class="landmark-dur">~ 6 viewports · scroll</span>
+          </div>
         </div>
-      </div>
-    </article>
+      </a>
+
+      <!-- № 02 · Taj Mahal -->
+      <a href="Sights.html#taj-stage" class="landmark-card landmark-card--dark" aria-label="Open Taj Mahal scroll animation">
+        <div class="landmark-media">
+          <img src="brand_assets/taj-frames/frame-132.jpg" alt="Taj Mahal — final obsidian render from the scroll animation">
+          <span class="landmark-chip"><span class="dot"></span>№ 02 · Agra</span>
+        </div>
+        <div class="landmark-body">
+          <div class="landmark-meta">
+            <span>27° 10′ 30″ N</span>
+            <span>1632 — 1653</span>
+          </div>
+          <h3 class="landmark-h">The <em>Taj</em><br>Mahal.</h3>
+          <p class="landmark-p">Twenty-two years. Twenty thousand artisans. Pietra Dura in lapis, jade, turquoise. 132 frames from blueprint to obsidian — the marble, re-rendered in electric light.</p>
+          <div class="landmark-foot">
+            <span class="landmark-cta">Open the sequence <span class="arr">→</span></span>
+            <span class="landmark-dur">~ 5 viewports · scroll</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="sights-foot">
+      <a href="Sights.html" class="btn-rust">
+        Open Sights
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+      <span class="sights-note">Two landmarks · 241 plates · dark theme</span>
+    </div>
   </div>
 </section>
 
