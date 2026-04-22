@@ -961,7 +961,146 @@
       line-height: 1.55;
     }
 
-    /* ─── Products ─── */
+    /* ─── Single product feature (Smart Watch Pro) ─── */
+    .product-feature {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 80% 0%, rgba(212, 168, 82, .10), transparent 55%),
+        linear-gradient(180deg, #15110B 0%, #0B0908 100%);
+      border: 1px solid rgba(212, 168, 82, .22);
+      color: var(--ink);
+      text-decoration: none;
+      box-shadow:
+        0 40px 100px -30px rgba(0, 0, 0, .9),
+        0 0 0 1px rgba(239, 210, 138, .05) inset;
+      transition: transform .6s cubic-bezier(.22,1,.36,1),
+                  border-color .3s,
+                  box-shadow .6s;
+    }
+    .product-feature:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 168, 82, .48);
+      box-shadow:
+        0 52px 110px -28px rgba(0, 0, 0, .95),
+        0 0 0 1px rgba(239, 210, 138, .12) inset;
+    }
+    .product-feature:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 4px;
+    }
+    .product-feature-media {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      background: #000;
+    }
+    .product-feature-media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 1.1s cubic-bezier(.22,1,.36,1);
+    }
+    .product-feature:hover .product-feature-media img { transform: scale(1.04); }
+    .product-feature-chip {
+      position: absolute;
+      top: 20px; left: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      background: rgba(11, 9, 8, .72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(239, 210, 138, .22);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-hi);
+    }
+    .product-feature-chip .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+    }
+    .product-feature-body {
+      padding: clamp(32px, 3.8vw, 56px) clamp(28px, 3.4vw, 52px);
+      display: flex; flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+    }
+    .product-feature-kicker {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .product-feature-h {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(30px, 3vw + 10px, 48px);
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--ink);
+      margin: 0;
+    }
+    .product-feature-h em {
+      font-style: italic; font-weight: 300;
+      font-variation-settings: "opsz" 144, "SOFT" 100;
+      color: var(--gold-hi);
+    }
+    .product-feature-p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-mute);
+      margin: 0;
+      max-width: 48ch;
+    }
+    .product-feature-foot {
+      margin-top: 10px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(239, 210, 138, .12);
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .product-feature-price {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .product-feature-price b {
+      color: var(--gold-hi);
+      font-weight: 600;
+      font-size: 18px;
+      letter-spacing: -0.01em;
+      font-family: var(--font-display);
+      margin-left: 4px;
+    }
+    .product-feature-link {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-hi);
+      font-weight: 600;
+    }
+    .product-feature-link .arr {
+      display: inline-block;
+      margin-left: 4px;
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .product-feature:hover .product-feature-link .arr { transform: translateX(6px); }
+    @media (max-width: 860px) {
+      .product-feature { grid-template-columns: 1fr; }
+      .product-feature-media { min-height: 300px; aspect-ratio: 16 / 10; }
+    }
+
+    /* ─── Legacy product grid styles (unused after redesign) ─── */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -3103,61 +3242,27 @@
   <div class="wrap">
     <div class="section-header">
       <div>
-        <div class="section-number">§ 02 <span class="sep">—</span> Our Products</div>
-        <h2 class="section-h2 display">A <em>family</em> of tools<br>for quality.</h2>
+        <div class="section-number">§ 02 <span class="sep">—</span> The Product</div>
+        <h2 class="section-h2 display">One thing,<br><em>done well.</em></h2>
       </div>
-      <p class="section-desc">Three products, one shared runtime. Mix what you need — start with the runner, add the insight layer when you scale, plug in the gate when you're ready for quality as policy.</p>
+      <p class="section-desc">Our flagship — the Smart Watch Pro. Aerospace titanium, sapphire crystal, medical-grade sensors, and a 48-hour battery that finally means what it says.</p>
     </div>
 
-    <div class="products-grid">
-
-      <div class="product">
-        <div class="product-tag"><span class="dot"></span>Runner</div>
-        <h3 class="product-name display">Tester <em>Runner</em></h3>
-        <p class="product-desc">The flagship regression engine. Every commit spins up an isolated environment, runs your full suite in parallel, and self-quarantines flaky tests so your attention stays on real signal.</p>
-        <div class="product-meta">
-          <span class="tags">Free · Pro · Enterprise</span>
-          <a href="product.html" class="product-link">Learn more
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
+    <a href="product.html" class="product-feature">
+      <div class="product-feature-media">
+        <img src="brand_assets/watch-frames/frame-01.webp" alt="Smart Watch Pro — titanium case, AMOLED display">
+        <span class="product-feature-chip"><span class="dot"></span>Flagship · Smart Watch Pro</span>
+      </div>
+      <div class="product-feature-body">
+        <div class="product-feature-kicker">§ The watch</div>
+        <h3 class="product-feature-h">Smart Watch <em>Pro.</em></h3>
+        <p class="product-feature-p">Grade-5 titanium, sapphire crystal, 48-hour battery. Medical-grade ECG, SpO₂, dual-band GPS. Everything you'd put on a spec sheet — and nothing you wouldn't. This is the one we wear.</p>
+        <div class="product-feature-foot">
+          <span class="product-feature-price">From <b>$499</b></span>
+          <span class="product-feature-link">See the watch <span class="arr">→</span></span>
         </div>
       </div>
-
-      <div class="product">
-        <div class="product-tag"><span class="dot"></span>Insights</div>
-        <h3 class="product-name display">Tester <em>Insights</em></h3>
-        <p class="product-desc">AI-powered quality memos surface what matters — flake trajectories, coverage drift, time-to-recovery — in a single-page report your stakeholders will actually read on Fridays.</p>
-        <div class="product-meta">
-          <span class="tags">Pro · Enterprise</span>
-          <a href="product.html" class="product-link">Learn more
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="product">
-        <div class="product-tag"><span class="dot"></span>Gate</div>
-        <h3 class="product-name display">Tester <em>Gate</em></h3>
-        <p class="product-desc">Quality-as-policy enforcement for your pipeline. Block merges on coverage drops, flake spikes, or critical failures — with one-line summaries that tell reviewers exactly why.</p>
-        <div class="product-meta">
-          <span class="tags">Pro · Enterprise</span>
-          <a href="product.html" class="product-link">Learn more
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="products-cta">
-      <a href="product.html" class="btn btn-gold">
-        Explore all products
-        <span class="arrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </span>
-      </a>
-      <span class="products-cta-note">Full comparison · specs · pricing</span>
-    </div>
+    </a>
   </div>
 </section>
 
